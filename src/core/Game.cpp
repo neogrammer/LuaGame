@@ -1,7 +1,41 @@
 #include <pch.hpp>
 
+void Game::manipulate(float dt)
+{
+	for (auto& m : mManipulators)
+	{
+		if (m->update(dt))
+		{
+
+		}
+	}
+}
+
+
+void Game::input(float dt)
+{
+	if (underPlayerControl)
+	{
+
+		underPlayerControl->vel = { 0.f, 0.f };
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) underPlayerControl->vel += { 0.f, -50.f};
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) underPlayerControl->vel += { -50.f, 0.f};
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) underPlayerControl->vel += { 0.f, 50.f};
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) underPlayerControl->vel += { 50.f, 0.f};
+		// DO PLAYER COLLISIONS HERE
+		underPlayerControl->pos += underPlayerControl->vel * dt;
+
+	}
+
+}
+
 void Game::update(float dt)
 {
+
+	
+	manipulate(dt);
+
+	input(dt);
 }
 void Game::render()
 {
@@ -103,6 +137,21 @@ void Game::render()
 			}
 		}
 	}
+
+	
+
+	for (const auto& dyno : mDynamicObjects)
+	{
+		sf::Sprite spr = sf::Sprite{};
+		auto& my = *(mDynamicObjects[dyno->id]);
+
+		spr.setTexture(*mDynamicTextures[dyno->id]);
+		spr.setPosition(my.pos);
+		spr.setTextureRect({ {0 , 0}, {(int)my.size.x, (int)my.size.y} });
+
+		mWnd.draw(spr);
+	}
+
 	sf::Text player1Text;
 	player1Text.setFont(Cfg::fonts.get((int)Cfg::Fonts::FriskyPuppy));
 	player1Text.setCharacterSize(44U);
@@ -126,10 +175,29 @@ Game::Game()
 	, player{}
 	, player2{}
 	, tex{}
+	, mDynamicObjects{ std::vector<Dynamic*>{} }
+	, mDynamicTextures{ std::vector<sf::Texture*>{} }	
+	, underPlayerControl{nullptr}
 {
 	mWnd.setPosition({ 100,55 });
 	mGameRunning = true;
 	tex.loadFromFile("assets/textures/tilesets/map1/platformer1.png");
+
+
+
+	mDynamicObjects.clear();
+	mDynamicTextures.clear();
+	mDynamicTextures.reserve(3);
+	mDynamicObjects.reserve(3);
+	
+	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::PlayerAtlas));
+	
+	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::MetalBird));
+	
+	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::BusterShot_Normal));
+
+
+
 }
 
 Game::Game(sf::ContextSettings& settings)
@@ -137,12 +205,37 @@ Game::Game(sf::ContextSettings& settings)
 	, player{}
 	, player2{}
 	, tex{}
+	, mDynamicObjects{ std::vector<Dynamic*>{} }
+	, mDynamicTextures{ std::vector<sf::Texture*>{} }
+	, underPlayerControl{nullptr}
 {
 	mWnd.setPosition({ 100,55 });
 	mGameRunning = true;
 	tex.loadFromFile("assets/textures/tilesets/map1/platformer1.png");
 
 
+
+	mDynamicObjects.clear();
+	mDynamicTextures.clear();
+	mDynamicTextures.reserve(3);
+	mDynamicObjects.reserve(3);
+	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::PlayerAtlas));
+	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::MetalBird));
+	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::BusterShot_Normal));
+
+	
+
+
+}
+
+Game::~Game()
+{
+	underPlayerControl = nullptr;
+	for (auto& dyno : mDynamicObjects)
+	{
+		if (dyno)
+			delete dyno;
+	}
 }
 
 void Game::run()
@@ -253,7 +346,8 @@ void Game::run()
 	luaL_openlibs(Lvl);
 	lua_register(Lvl, "cpp_loadLevel", lua_loadLevel);
 	lua_register(Lvl, "cpp_setTile", lua_setTile);
-
+	lua_register(Lvl, "cpp_createDynamicObject", lua_createDynamicObject);
+	lua_register(Lvl, "cpp_assignPlayerControl", lua_assignPlayerControl);
 	if (mylua::CheckLua(Lvl, luaL_dofile(Lvl, "assets/lua_scripts/level.lua")))
 	{
 		lua_getglobal(Lvl, "LoadLevel");
@@ -267,7 +361,9 @@ void Game::run()
 
 			}
 			lua_pop(Lvl, 1);
-		}
+			
+
+		}		
 	}
 	lua_pop(Lvl, 1);
 	lua_close(Lvl);
@@ -374,3 +470,21 @@ void Game::setTile(int x, int y, int str)
 		break;
 	}
 }
+
+Game::Dynamic* Game::createDynamicObject(int type, float x, float y, float w, float h)
+{
+		Dynamic* tmp = new Dynamic{};
+		tmp->id = type;
+		tmp->pos = { x, y };
+		tmp->size = { w, h };
+		mDynamicObjects.emplace_back( std::move(tmp) );
+		return tmp;
+}
+
+void Game::assignPlayerControl(Dynamic& dyno)
+{
+	Dynamic* ptr = &dyno; //auto ptr = std::find_if(mDynamicObjects.begin(), mDynamicObjects.end(), [&dyno](const std::shared_ptr<Dynamic>& p) { return p.get() == dyno; });
+	underPlayerControl = ptr;
+	ptr = nullptr;
+}
+

@@ -106,10 +106,13 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>C:\Users\jlhar\source\repos\LuaGame\src;C:\sdks\sfml_64\include;C:\sdks\lua_5_3_6\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\sdks\lua_5_3_6;C:\sdks\sfml_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>openal32.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -169,6 +172,9 @@
     <Font Include="assets\fonts\frisky_puppy.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\textures\actors\enemies\metal_bird\metal_bird.png" />
+    <Image Include="assets\textures\actors\player\player_atlas.png" />
+    <Image Include="assets\textures\projectiles\bullets\buster_shot\buster_shot_normal.png" />
     <Image Include="assets\textures\tilesets\map1\A1_AnimatedGround.png" />
     <Image Include="assets\textures\tilesets\map1\A4_Walls.png" />
     <Image Include="assets\textures\tilesets\map1\A4_Walls_2.png" />

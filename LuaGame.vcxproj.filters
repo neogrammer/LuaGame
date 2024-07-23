@@ -49,6 +49,27 @@
     <Filter Include="assets\textures\tilesets\map1">
       <UniqueIdentifier>{e71a2979-8e91-4dbe-912e-618e19b67ab6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\textures\actors">
+      <UniqueIdentifier>{2a056955-5da2-49c6-bd4b-9ece09335b13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\actors\player">
+      <UniqueIdentifier>{11472a48-6a0a-402b-a8d2-dd27512c1f16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\projectiles">
+      <UniqueIdentifier>{b761d8a4-35ad-4915-8143-b8626231d512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\actors\enemies">
+      <UniqueIdentifier>{4a32ab3a-7f19-436d-b674-b8860b79c751}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\actors\enemies\metal_bird">
+      <UniqueIdentifier>{734c3abd-27a9-4d35-967c-5ae8a93202e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\projectiles\bullets">
+      <UniqueIdentifier>{2fabbd41-2ece-4d74-a287-9748093e82a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\projectiles\bullets\buster_shot">
+      <UniqueIdentifier>{054154e6-bd0e-47ce-9742-82c9232d13a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -162,6 +183,15 @@
     </Image>
     <Image Include="assets\textures\tilesets\map1\ground.png">
       <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\actors\player\player_atlas.png">
+      <Filter>assets\textures\actors\player</Filter>
+    </Image>
+    <Image Include="assets\textures\actors\enemies\metal_bird\metal_bird.png">
+      <Filter>assets\textures\actors\enemies\metal_bird</Filter>
+    </Image>
+    <Image Include="assets\textures\projectiles\bullets\buster_shot\buster_shot_normal.png">
+      <Filter>assets\textures\projectiles\bullets\buster_shot</Filter>
     </Image>
   </ItemGroup>
 </Project>

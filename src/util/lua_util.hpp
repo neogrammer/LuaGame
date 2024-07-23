@@ -14,7 +14,7 @@ extern "C"
 
 
 #ifdef _WIN32
-#pragma comment(lib, "lua53.lib")
+#pragma comment(lib, "liblua53.a")
 #endif
 
 namespace mylua

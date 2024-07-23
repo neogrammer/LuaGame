@@ -15,7 +15,7 @@ struct Cfg
 	static void Initialize();
 
 	// Resource Enums 
-	enum class Textures : int { Count };
+	enum class Textures : int { PlayerAtlas, MetalBird, BusterShot_Normal, Count };
 	enum class Fonts : int { Freedom, FriskyPuppy, Count };
 	enum class Music : int { Count };
 	enum class Sounds : int { Count };

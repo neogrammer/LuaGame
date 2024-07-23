@@ -29,10 +29,11 @@ void Cfg::initSounds()
 
 void Cfg::initTextures()
 {
-	/*textures.load((int)Textures::Bullet1, "assets/tex/projectiles/bustershot_normal.png");
-	textures.load((int)Textures::Tileset1, "assets/tex/tilesets/tileset1.png");
-	textures.load((int)Textures::PlayerIdle, "assets/tex/megaman/idle120x136_3.png");
-	textures.load((int)Textures::PlayerRun, "assets/tex/megaman/run136x140_10.png");
+	textures.load((int)Textures::PlayerAtlas, "assets/textures/actors/player/player_atlas.png");
+	textures.load((int)Textures::MetalBird, "assets/textures/actors/enemies/metal_bird/metal_bird.png");
+	textures.load((int)Textures::BusterShot_Normal, "assets/textures/projectiles/bullets/buster_shot/buster_shot_normal.png");
+
+	/*textures.load((int)Textures::PlayerRun, "assets/tex/megaman/run136x140_10.png");
 	textures.load((int)Textures::PlayerTransRun, "assets/tex/megaman/trans_run135x136.png");
 	textures.load((int)Textures::PlayerShootStand, "assets/tex/megaman/shoot_stand120x136_2.png");
 	textures.load((int)Textures::PlayerTransJump, "assets/tex/megaman/trans_jump120x184_2.png");
