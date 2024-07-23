@@ -7,29 +7,108 @@
     <Filter Include="assets">
       <UniqueIdentifier>{7220d553-a97b-4c47-a3fc-d63f11080441}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\util">
+    <Filter Include="assets\lua_scripts">
+      <UniqueIdentifier>{b8d2c3d7-39c4-4bb4-81d7-14714f29c81a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core">
+      <UniqueIdentifier>{f2ca8a35-3925-4e03-b2bf-75ec4dfd30f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers">
+      <UniqueIdentifier>{de42a818-b672-492f-b122-45ef90f0e9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\pch">
+      <UniqueIdentifier>{a708df36-ac4b-4e90-92f3-fc8bdeea036b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\action">
+      <UniqueIdentifier>{66295c90-3660-4d2c-b621-b367b6a0011c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\core">
+      <UniqueIdentifier>{c1b17f44-fc53-4e15-953b-9ae699bfa56f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\action">
+      <UniqueIdentifier>{3f714e79-1e55-4667-bb1f-aba4981082a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\core\tpl">
+      <UniqueIdentifier>{b6245762-1485-4d0e-be3c-da0dd5ef0c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\action\tpl">
+      <UniqueIdentifier>{28815ee0-1677-4c7c-85a4-9197fae2b26f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\util">
       <UniqueIdentifier>{ed1e777b-7f93-42bb-8e4d-4ea4281fcca3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\fonts">
+      <UniqueIdentifier>{1853a20c-3753-420e-bce5-1bf877034a4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\Cfg.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
     <ClCompile Include="src\pch.cpp">
-      <Filter>src</Filter>
+      <Filter>headers\pch</Filter>
+    </ClCompile>
+    <ClCompile Include="src\action\Action.cpp">
+      <Filter>src\action</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Game.cpp">
+      <Filter>src\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\pch.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\pch.hpp">
+      <Filter>headers\pch</Filter>
     </ClInclude>
-    <ClInclude Include="src\lua_util.h">
-      <Filter>src\util</Filter>
+    <ClInclude Include="src\core\Cfg.hpp">
+      <Filter>headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\ResourceManager.hpp">
+      <Filter>headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\action\Action.hpp">
+      <Filter>headers\action</Filter>
+    </ClInclude>
+    <ClInclude Include="src\action\ActionMap.hpp">
+      <Filter>headers\action</Filter>
+    </ClInclude>
+    <ClInclude Include="src\action\ActionTarget.hpp">
+      <Filter>headers\action</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\lua_util.hpp">
+      <Filter>headers\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Game.hpp">
+      <Filter>headers\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\lua_scripts\level.lua">
+      <Filter>assets\lua_scripts</Filter>
+    </None>
+    <None Include="src\core\tpl\ResourceManager.tpl">
+      <Filter>headers\core\tpl</Filter>
+    </None>
+    <None Include="src\action\tpl\ActionMap.tpl">
+      <Filter>headers\action\tpl</Filter>
+    </None>
+    <None Include="src\action\tpl\ActionTarget.tpl">
+      <Filter>headers\action\tpl</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Text Include="src\script-Main.lua">
-      <Filter>src</Filter>
+      <Filter>assets\lua_scripts</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\freedom.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\frisky_puppy.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
   </ItemGroup>
 </Project>

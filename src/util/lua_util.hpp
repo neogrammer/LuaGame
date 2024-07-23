@@ -8,7 +8,10 @@ extern "C"
 #include <lauxlib.h>
 #include <lualib.h>
 #include <string>
+
 }
+
+
 
 #ifdef _WIN32
 #pragma comment(lib, "lua53.lib")
@@ -16,7 +19,7 @@ extern "C"
 
 namespace mylua
 {
-	bool CheckLua(lua_State* L, int r)
+	static bool CheckLua(lua_State* L, int r)
 	{
 		if (r != LUA_OK)
 		{
@@ -25,9 +28,8 @@ namespace mylua
 			return false;
 		}
 		return true;
-	}
-
-	int HostFunction(lua_State* L)
+	};
+	static int lua_HostFunction(lua_State* L)
 	{
 		float a = (float)lua_tonumber(L, 1);
 		float b = (float)lua_tonumber(L, 2);
@@ -35,6 +37,7 @@ namespace mylua
 		float  c = a * b;
 		lua_pushnumber(L, c);
 		return 1;
-	}
+	};
+	
 }
 #endif

@@ -20,7 +20,7 @@ end
 
 function DoAThing(a, b)
 	print("[LUA] DoAThing("..a..", "..b..") called \n")
-	c = HostFunction(a + 10, b * 3)
+	c = cpp_HostFunction(a + 10, b * 3)
 
 	return c
 end
