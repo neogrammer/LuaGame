@@ -168,6 +168,22 @@
     <Font Include="assets\fonts\freedom.ttf" />
     <Font Include="assets\fonts\frisky_puppy.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\tilesets\map1\A1_AnimatedGround.png" />
+    <Image Include="assets\textures\tilesets\map1\A4_Walls.png" />
+    <Image Include="assets\textures\tilesets\map1\A4_Walls_2.png" />
+    <Image Include="assets\textures\tilesets\map1\A5_Tiles.png" />
+    <Image Include="assets\textures\tilesets\map1\B_HouseExteriorTiles.png" />
+    <Image Include="assets\textures\tilesets\map1\B_HouseExteriorTiles_1.png" />
+    <Image Include="assets\textures\tilesets\map1\B_HouseExteriorTiles_1_B.png" />
+    <Image Include="assets\textures\tilesets\map1\B_HouseExteriorTiles_2.png" />
+    <Image Include="assets\textures\tilesets\map1\B_HouseExteriorTiles_2_B.png" />
+    <Image Include="assets\textures\tilesets\map1\C_OutSide_Nature.png" />
+    <Image Include="assets\textures\tilesets\map1\D_Inside_House.png" />
+    <Image Include="assets\textures\tilesets\map1\D_OutDoor.png" />
+    <Image Include="assets\textures\tilesets\map1\ground.png" />
+    <Image Include="assets\textures\tilesets\map1\platformer1.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

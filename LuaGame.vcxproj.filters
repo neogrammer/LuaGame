@@ -40,6 +40,15 @@
     <Filter Include="assets\fonts">
       <UniqueIdentifier>{1853a20c-3753-420e-bce5-1bf877034a4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\textures">
+      <UniqueIdentifier>{a2399188-3a0b-4b04-b4ae-2380e94f2deb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\tilesets">
+      <UniqueIdentifier>{9834df97-3307-406d-a474-22425b373b5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures\tilesets\map1">
+      <UniqueIdentifier>{e71a2979-8e91-4dbe-912e-618e19b67ab6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -110,5 +119,49 @@
     <Font Include="assets\fonts\frisky_puppy.ttf">
       <Filter>assets\fonts</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\tilesets\map1\platformer1.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\A1_AnimatedGround.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\A4_Walls.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\A4_Walls_2.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\A5_Tiles.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\B_HouseExteriorTiles.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\B_HouseExteriorTiles_1.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\B_HouseExteriorTiles_1_B.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\B_HouseExteriorTiles_2.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\B_HouseExteriorTiles_2_B.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\C_OutSide_Nature.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\D_Inside_House.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\D_OutDoor.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
+    <Image Include="assets\textures\tilesets\map1\ground.png">
+      <Filter>assets\textures\tilesets\map1</Filter>
+    </Image>
   </ItemGroup>
 </Project>
