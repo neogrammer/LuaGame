@@ -1,14 +1,54 @@
 #include <pch.hpp>
 
-void Game::manipulate(float dt)
+void Game::manipulate(float dt, lua_State* L)
 {
+	for (auto& m : mNewManipulators)
+	{
+		Manipulator* man{ std::move(m) };
+		mManipulators.emplace_back(std::move(man));
+		man = nullptr;
+		m = nullptr;
+
+	}
+	mNewManipulators.clear();
+	mNewManipulators.shrink_to_fit();
 	for (auto& m : mManipulators)
 	{
 		if (m->update(dt))
 		{
-
+			if (m->dyno->dType == DynamicType::BusterShot_Normal)
+			{
+				lua_getglobal(L, "IssueNextHorizTask");
+				if (L, lua_isfunction(L, -1))
+				{
+					lua_pushlightuserdata(L, this);
+					lua_pushlightuserdata(L, m->dyno);
+					lua_pushnumber( L, dynamic_cast<DynBullet*>(m->dyno)->maxDist);
+					lua_pushnumber(L, m->dyno->pos.y);
+					if (!mylua::CheckLua(L, lua_pcall(L, 4, 1, 0)))
+					{
+						// script bad
+					}
+				}
+			}
+			else
+			{
+				lua_getglobal(L, "IssueNextTask");
+				if (L, lua_isfunction(L, -1))
+				{
+					lua_pushlightuserdata(L, this);
+					lua_pushlightuserdata(L, m->dyno);
+					if (!mylua::CheckLua(L, lua_pcall(L, 2, 1, 0)))
+					{
+						// script bad
+					}
+				}
+			}
 		}
 	}
+
+	std::erase_if(mManipulators, [](Manipulator* m)
+		{ return m->complete; });
 }
 
 
@@ -29,11 +69,10 @@ void Game::input(float dt)
 
 }
 
-void Game::update(float dt)
+void Game::update(float dt, lua_State* L)
 {
-
+	manipulate(dt, L);
 	
-	manipulate(dt);
 
 	input(dt);
 }
@@ -196,6 +235,7 @@ Game::Game()
 	
 	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::BusterShot_Normal));
 
+	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::FlyPad));
 
 
 }
@@ -217,11 +257,13 @@ Game::Game(sf::ContextSettings& settings)
 
 	mDynamicObjects.clear();
 	mDynamicTextures.clear();
-	mDynamicTextures.reserve(3);
-	mDynamicObjects.reserve(3);
+	mDynamicTextures.reserve(4);
+	mDynamicObjects.reserve(4);
 	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::PlayerAtlas));
 	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::MetalBird));
 	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::BusterShot_Normal));
+	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::FlyPad));
+
 
 	
 
@@ -255,15 +297,13 @@ void Game::run()
 			{
 				std::cout << "Did a thing" << std::endl;
 			}
-			lua_pop(L, 1);
+			
 
 		}
 
 
 
 	}
-	lua_pop(L, 1);
-
 	lua_close(L);
 
 	lua_State* N = luaL_newstate();
@@ -300,7 +340,7 @@ void Game::run()
 				}
 
 			}
-			lua_pop(N, 1);
+			
 		}
 
 
@@ -333,13 +373,12 @@ void Game::run()
 					lua_pop(N, 1);
 				}
 			}
-			lua_pop(N, 1);
+			
 
 		}
 
 
 	}
-	lua_pop(N, 1);
 	lua_close(N);
 
 	lua_State* Lvl = luaL_newstate();
@@ -348,70 +387,71 @@ void Game::run()
 	lua_register(Lvl, "cpp_setTile", lua_setTile);
 	lua_register(Lvl, "cpp_createDynamicObject", lua_createDynamicObject);
 	lua_register(Lvl, "cpp_assignPlayerControl", lua_assignPlayerControl);
+	lua_register(Lvl, "cpp_moveObject", lua_moveObject);
+	
 	if (mylua::CheckLua(Lvl, luaL_dofile(Lvl, "assets/lua_scripts/level.lua")))
 	{
 		lua_getglobal(Lvl, "LoadLevel");
-		if (lua_isfunction(Lvl, -1))
+		if(lua_isfunction(Lvl, -1))
 		{
 			lua_pushlightuserdata(Lvl, this);
 			lua_pushnumber(Lvl, 1);
 			if (mylua::CheckLua(Lvl, lua_pcall(Lvl, 2, 1, 0)))
 			{
 				std::cout << "Success" << std::endl;
-
 			}
-			lua_pop(Lvl, 1);
+		}
+
+
+
+
+
+
+
+				sf::Clock fpsTimer;
+				sf::Time elapsed;
+				while (mWnd.isOpen())
+				{
+					sf::Event e;
+					while (mWnd.pollEvent(e))
+					{
+						switch (e.type)
+						{
+						case sf::Event::Closed:
+							mGameRunning = false;
+							break;
+						case sf::Event::KeyReleased:
+							if (e.key.code == sf::Keyboard::Escape)
+								mGameRunning = false;
+							break;
+						default:
+							break;
+						}
+					}
+					elapsed = fpsTimer.restart();
+
+					
+
 			
+						update(elapsed.asSeconds(), Lvl);
+						
 
-		}		
+				
+						//render game frame
+						mWnd.clear(sf::Color::Blue);
+						render();
+						mWnd.display();
+					
+
+					if (mGameRunning == false) mWnd.close();
+				}
+
+			
+		
+
+
 	}
-	lua_pop(Lvl, 1);
 	lua_close(Lvl);
-
-
-	sf::Clock fpsTimer;
-	sf::Time elapsed;
-	while (mWnd.isOpen())
-	{
-		sf::Event e;
-		while (mWnd.pollEvent(e))
-		{
-			switch (e.type)
-			{
-			case sf::Event::Closed:
-				mGameRunning = false;
-				break;
-			case sf::Event::KeyReleased:
-				if (e.key.code == sf::Keyboard::Escape)
-					mGameRunning = false;
-				break;
-			default:
-				break;
-			}
-		}
-
-
-
-		elapsed += fpsTimer.restart();
-		bool repaint = false;
-		while (elapsed >= sf::seconds(0.016666667f))
-		{
-			repaint = true;
-			elapsed -= sf::seconds(0.016666667f);
-			update(0.016666667f);
-			elapsed += fpsTimer.restart();
-		}
-
-		if (repaint)
-		{
-			//render game frame
-			mWnd.clear(sf::Color::Blue);
-			render();
-			mWnd.display();
-		}
-
-		if (mGameRunning == false) mWnd.close();
-	}
 }
 
 
@@ -419,12 +459,12 @@ void Game::loadLevel(int w, int h)
 {
 	mLevelSize = { w, h };
 	mLevelVec.clear();
-	mLevelVec.resize((uint8_t)w * h);
+	mLevelVec.reserve((uint8_t)w * h);
 	for (int y = 0; y < h; y++)
 	{
 		for (int x = 0; x < w; x++)
 		{
-			mLevelVec.push_back(TileType::Empty);
+			mLevelVec.emplace_back(TileType::Empty);
 		}
 	}
 
@@ -471,14 +511,54 @@ void Game::setTile(int x, int y, int str)
 	}
 }
 
-Game::Dynamic* Game::createDynamicObject(int type, float x, float y, float w, float h)
+Game::Dynamic* Game::createDynamicObject(int type, float x, float y, float w, float h, int dir)
 {
-		Dynamic* tmp = new Dynamic{};
-		tmp->id = type;
-		tmp->pos = { x, y };
-		tmp->size = { w, h };
-		mDynamicObjects.emplace_back( std::move(tmp) );
-		return tmp;
+	Dynamic* tmp{ nullptr };
+	if (type == 0)
+	{
+		tmp = new Dynamic{};
+		tmp->dType = DynamicType::Player;
+	}
+	else if (type == 1)
+	{
+		tmp = new Dynamic{};
+		tmp->dType = DynamicType::MetalBird;
+	}
+	else if (type == 2)
+	{
+		tmp = new DynBullet{};
+
+		tmp->dType = DynamicType::BusterShot_Normal;
+
+		if (dir == 0)
+		{
+			// move left
+			dynamic_cast<DynBullet*>(tmp)->dir = { -1.f, 0.f };
+		}
+		else
+		{
+			// move right
+			dynamic_cast<DynBullet*>(tmp)->dir = { 1.f, 0.f };
+
+		}
+		dynamic_cast<DynBullet*>(tmp)->maxDist =  Cfg::ScrW + (int)(dynamic_cast<DynBullet*>(tmp)->dir.x * (int)x);
+	}
+	else if (type == 3)
+	{
+		tmp = new Dynamic{};
+		tmp->dType = DynamicType::FlyPad;
+	}
+	else
+	{
+		tmp = new Dynamic{};
+		tmp->dType = DynamicType::NotSet;
+	}
+	tmp->id = type;
+	tmp->pos = { x, y };
+	tmp->size = { w, h };
+	mDynamicObjects.emplace_back( std::move(tmp) );
+	return tmp;
+	
 }
 
 void Game::assignPlayerControl(Dynamic& dyno)
@@ -486,5 +566,12 @@ void Game::assignPlayerControl(Dynamic& dyno)
 	Dynamic* ptr = &dyno; //auto ptr = std::find_if(mDynamicObjects.begin(), mDynamicObjects.end(), [&dyno](const std::shared_ptr<Dynamic>& p) { return p.get() == dyno; });
 	underPlayerControl = ptr;
 	ptr = nullptr;
+}
+
+void Game::moveObject(Dynamic& dyno, float x, float y, float time)
+{
+	Dynamic* tmp = &dyno;
+	mNewManipulators.emplace_back(new ManInterpPos{ std::move(tmp), x, y, time });
+	tmp = nullptr;
 }
 

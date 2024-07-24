@@ -13,18 +13,26 @@ local BR = 9
 local Player = 0
 local Bird = 1
 local BusterNormal = 2
+local Platform = 3
+ local dynamics = {DynamicBehaviour1 , HorizontalBehaviour}
 
- local dynamics = {}
-
-function DynamicBehavior1(host, dyno)
+function DynamicBehaviour1(host, dyno)
 	while true do
-		_MoveObject(host, dyno, 40.0, 40.0, 5.0)
+		cpp_moveObject(host, dyno, 40.0, 40.0, 5.0)
 		coroutine.yield()
-		_MoveObject(host, dyno, 40.0, 400.0, 5.0)
+		cpp_moveObject(host, dyno, 40.0, 400.0, 5.0)
 		coroutine.yield()
-		_MoveObject(host, dyno, 400.0, 400.0, 5.0)
+		cpp_moveObject(host, dyno, 400.0, 400.0, 5.0)
 		coroutine.yield()
-		_MoveObject(host, dyno, 400.0, 40.0, 5.0)
+		cpp_moveObject(host, dyno, 400.0, 40.0, 5.0)
+		coroutine.yield()
+	end
+end
+
+function HorizontalBehaviour(host, dyno, maxd, posy)
+	print("[LUA] Issueing task for bullet \n")	
+	while true do
+		cpp_moveObject(host, dyno, maxd, 600.0, 5.0)
 		coroutine.yield()
 	end
 end
@@ -32,6 +40,13 @@ end
 function IssueNextTask(host, dyno)
 	if coroutine.status(dynamics[dyno].behaviour) ~= 'dead' then
 			coroutine.resume(dynamics[dyno].behaviour, host, dyno)
+	end
+
+end
+
+function IssueNextHorizTask(host, dyno, maxd, posy)
+	if coroutine.status(dynamics[dyno].behaviour) ~= 'dead' then
+			coroutine.resume(dynamics[dyno].behaviour, host, dyno, maxd, posy)
 	end
 
 end
@@ -106,14 +121,21 @@ function LoadLevel(host, level)
 		end
 		end
 		
-		PlayerObject = cpp_createDynamicObject(host, 0, 650.0, 460.0, 120.0, 160.0)
+		PlayerObject = cpp_createDynamicObject(host, 0, 650.0, 460.0, 120.0, 160.0, 0)
 		cpp_assignPlayerControl(host, PlayerObject);
 		
-		BirdObject = cpp_createDynamicObject(host, 1, 650.0, 460.0, 220.0, 296.0)
+		BirdObject = cpp_createDynamicObject(host, 1, 650.0, 460.0, 220.0, 296.0, 0)
 		
-		BulletObject = cpp_createDynamicObject(host, 2, 60.0, 500.0, 24.0, 18.0)
-		dynamics[BulletObject] = {behaviour = coroutine.create(DynamicBehavior1) }
-		IssueNextTask(host, BulletObject)
+		BulletObject = cpp_createDynamicObject(host, 2, 600.0, 600.0, 24.0, 18.0, 1)
+		dynamics[BulletObject] = {behaviour = coroutine.create(HorizontalBehaviour) }
+		IssueNextHorizTask(host, BulletObject, 1280.0, 600.0)
+		
+
+		Platform = cpp_createDynamicObject(host, 3, 600.0, 600.0, 67.0, 40.0, 0)
+		dynamics[Platform] = {behaviour = coroutine.create(DynamicBehaviour1) }
+		IssueNextHorizTask(host, Platform)
+
+		
 		return 1
 
 end

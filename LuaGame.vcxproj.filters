@@ -70,6 +70,9 @@
     <Filter Include="assets\textures\projectiles\bullets\buster_shot">
       <UniqueIdentifier>{054154e6-bd0e-47ce-9742-82c9232d13a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets\textures\platforms">
+      <UniqueIdentifier>{a6d8b19a-4eee-4f54-9056-04cbeaa094f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -192,6 +195,9 @@
     </Image>
     <Image Include="assets\textures\projectiles\bullets\buster_shot\buster_shot_normal.png">
       <Filter>assets\textures\projectiles\bullets\buster_shot</Filter>
+    </Image>
+    <Image Include="assets\textures\platforms\fly_pad67x40.png">
+      <Filter>assets\textures\platforms</Filter>
     </Image>
   </ItemGroup>
 </Project>

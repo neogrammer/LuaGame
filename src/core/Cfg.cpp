@@ -6,7 +6,8 @@ ResourceManager<sf::Music, int> Cfg::music = {};
 ResourceManager<sf::SoundBuffer, int> Cfg::sounds = {};
 
 ActionMap<int> Cfg::playerInputs = {};
-
+int Cfg::ScrW = { 1280 };
+int Cfg::ScrH = { 768 };
 void Cfg::Initialize()
 {
     initTextures();
@@ -29,6 +30,7 @@ void Cfg::initSounds()
 
 void Cfg::initTextures()
 {
+	textures.load((int)Textures::FlyPad, "assets/textures/platforms/fly_pad67x40.png");
 	textures.load((int)Textures::PlayerAtlas, "assets/textures/actors/player/player_atlas.png");
 	textures.load((int)Textures::MetalBird, "assets/textures/actors/enemies/metal_bird/metal_bird.png");
 	textures.load((int)Textures::BusterShot_Normal, "assets/textures/projectiles/bullets/buster_shot/buster_shot_normal.png");
