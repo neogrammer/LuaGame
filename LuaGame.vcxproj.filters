@@ -73,6 +73,9 @@
     <Filter Include="assets\textures\platforms">
       <UniqueIdentifier>{a6d8b19a-4eee-4f54-9056-04cbeaa094f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{4a8e9dc5-c41e-4679-82d8-6b1b3ad3d4d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -89,6 +92,27 @@
     </ClCompile>
     <ClCompile Include="src\core\Game.cpp">
       <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\render_game.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\run_game.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\util_dynamics.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\util_game.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\util.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\util_tile.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\util_manipulator.cpp">
+      <Filter>src\util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="src\core\Game.hpp">
       <Filter>headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\util.hpp">
+      <Filter>headers\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -31,10 +31,8 @@ end
 
 function HorizontalBehaviour(host, dyno, maxd, posy)
 	print("[LUA] Issueing task for bullet \n")	
-	while true do
-		cpp_moveObject(host, dyno, maxd, 600.0, 5.0)
-		coroutine.yield()
-	end
+		cpp_moveObject(host, dyno, maxd, posy, 1.0)
+		--coroutine.yield()
 end
 
 function IssueNextTask(host, dyno)
@@ -128,12 +126,12 @@ function LoadLevel(host, level)
 		
 		BulletObject = cpp_createDynamicObject(host, 2, 600.0, 600.0, 24.0, 18.0, 1)
 		dynamics[BulletObject] = {behaviour = coroutine.create(HorizontalBehaviour) }
-		IssueNextHorizTask(host, BulletObject, 1280.0, 600.0)
+		IssueNextHorizTask(host, BulletObject, 600.0 + 1280.0 * -1.0 , 600.0)
 		
 
 		Platform = cpp_createDynamicObject(host, 3, 600.0, 600.0, 67.0, 40.0, 0)
 		dynamics[Platform] = {behaviour = coroutine.create(DynamicBehaviour1) }
-		IssueNextHorizTask(host, Platform)
+		IssueNextTask(host, Platform)
 
 		
 		return 1

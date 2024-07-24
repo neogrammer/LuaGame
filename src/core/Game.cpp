@@ -1,58 +1,7 @@
 #include <pch.hpp>
 
-void Game::manipulate(float dt, lua_State* L)
-{
-	for (auto& m : mNewManipulators)
-	{
-		Manipulator* man{ std::move(m) };
-		mManipulators.emplace_back(std::move(man));
-		man = nullptr;
-		m = nullptr;
 
-	}
-	mNewManipulators.clear();
-	mNewManipulators.shrink_to_fit();
-	for (auto& m : mManipulators)
-	{
-		if (m->update(dt))
-		{
-			if (m->dyno->dType == DynamicType::BusterShot_Normal)
-			{
-				lua_getglobal(L, "IssueNextHorizTask");
-				if (L, lua_isfunction(L, -1))
-				{
-					lua_pushlightuserdata(L, this);
-					lua_pushlightuserdata(L, m->dyno);
-					lua_pushnumber( L, dynamic_cast<DynBullet*>(m->dyno)->maxDist);
-					lua_pushnumber(L, m->dyno->pos.y);
-					if (!mylua::CheckLua(L, lua_pcall(L, 4, 1, 0)))
-					{
-						// script bad
-					}
-				}
-			}
-			else
-			{
-				lua_getglobal(L, "IssueNextTask");
-				if (L, lua_isfunction(L, -1))
-				{
-					lua_pushlightuserdata(L, this);
-					lua_pushlightuserdata(L, m->dyno);
-					if (!mylua::CheckLua(L, lua_pcall(L, 2, 1, 0)))
-					{
-						// script bad
-					}
-				}
-			}
-		}
-	}
-
-	std::erase_if(mManipulators, [](Manipulator* m)
-		{ return m->complete; });
-}
-
-
-void Game::input(float dt)
+void Game::input(float dt, lua_State* L)
 {
 	if (underPlayerControl)
 	{
@@ -62,6 +11,11 @@ void Game::input(float dt)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) underPlayerControl->vel += { -50.f, 0.f};
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) underPlayerControl->vel += { 0.f, 50.f};
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) underPlayerControl->vel += { 50.f, 0.f};
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		{
+
+		}
 		// DO PLAYER COLLISIONS HERE
 		underPlayerControl->pos += underPlayerControl->vel * dt;
 
@@ -74,176 +28,13 @@ void Game::update(float dt, lua_State* L)
 	manipulate(dt, L);
 	
 
-	input(dt);
-}
-void Game::render()
-{
-	sf::Vector2i tile = { 0, 0 };
-	for (tile.y = 0; tile.y < mLevelSize.y; tile.y++)
-	{
-		for (tile.x = 0; tile.x < mLevelSize.x; tile.x++)
-		{
-			TileType b = mLevelVec[(uint8_t)tile.y * mLevelSize.x + tile.x];
-
-
-			switch (b)
-			{
-			case TileType::Empty:
-				break;
-			case TileType::Solid:
-			{
-				sf::Sprite spr{};
-				spr.setTexture(tex);
-				spr.setTextureRect({ {7 * 32, 0}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
-				mWnd.draw(spr);
-			}
-			break;
-			case TileType::TL:
-			{
-				sf::Sprite spr{};
-				spr.setTexture(tex);
-				spr.setTextureRect({ {0 * 32, 0}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
-				mWnd.draw(spr);
-			}
-			break;
-			case TileType::TOP:
-			{
-				sf::Sprite spr{};
-				spr.setTexture(tex);
-				spr.setTextureRect({ {1 * 32, 0}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
-				mWnd.draw(spr);
-			}
-			break;
-			case TileType::TR:
-			{
-				sf::Sprite spr{};
-				spr.setTexture(tex);
-				spr.setTextureRect({ {2 * 32, 0}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
-				mWnd.draw(spr);
-			}
-			break;
-			case TileType::L:
-			{
-				sf::Sprite spr{};
-				spr.setTexture(tex);
-				spr.setTextureRect({ {6 * 32, 0}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
-				mWnd.draw(spr);
-			}
-			break;
-			case TileType::R:
-			{
-				sf::Sprite spr{};
-				spr.setTexture(tex);
-				spr.setTextureRect({ {0 * 32, 32}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
-				mWnd.draw(spr);
-			}
-			break;
-			case TileType::BL:
-			{
-				sf::Sprite spr{};
-				spr.setTexture(tex);
-				spr.setTextureRect({ {96, 64}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
-				mWnd.draw(spr);
-			}
-			break;
-			case TileType::B:
-			{
-				sf::Sprite spr{};
-				spr.setTexture(tex);
-				spr.setTextureRect({ {32, 64}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
-				mWnd.draw(spr);
-			}
-			break;
-			case TileType::BR:
-			{
-				sf::Sprite spr{};
-				spr.setTexture(tex);
-				spr.setTextureRect({ {64, 64}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
-				mWnd.draw(spr);
-			}
-			break;
-			default:
-				break;
-			}
-		}
-	}
-
-	
-
-	for (const auto& dyno : mDynamicObjects)
-	{
-		sf::Sprite spr = sf::Sprite{};
-		auto& my = *(mDynamicObjects[dyno->id]);
-
-		spr.setTexture(*mDynamicTextures[dyno->id]);
-		spr.setPosition(my.pos);
-		spr.setTextureRect({ {0 , 0}, {(int)my.size.x, (int)my.size.y} });
-
-		mWnd.draw(spr);
-	}
-
-	sf::Text player1Text;
-	player1Text.setFont(Cfg::fonts.get((int)Cfg::Fonts::FriskyPuppy));
-	player1Text.setCharacterSize(44U);
-	player1Text.setFillColor(sf::Color::White);
-	player1Text.setString(player.name + ' ' + player.title + ' ' + player.name + ' ' + std::to_string(player.level));
-	player1Text.setPosition({ 200.f, 378.f });
-	sf::Text player2Text;
-	player2Text.setFont(Cfg::fonts.get((int)Cfg::Fonts::FriskyPuppy));
-	player2Text.setCharacterSize(44U);
-	player2Text.setFillColor(sf::Color::White);
-	player2Text.setString(player2.name + ' ' + player2.title + ' ' + player2.name + ' ' + std::to_string(player2.level));
-	player2Text.setPosition({ 200.f, 422.f });
-
-	mWnd.draw(player1Text);
-	mWnd.draw(player2Text);
-
+	input(dt, L);
 }
 
-Game::Game()
-	: mWnd{ sf::VideoMode{1280U,768U,32U},"LuaGame",sf::Style::Close }
-	, player{}
-	, player2{}
-	, tex{}
-	, mDynamicObjects{ std::vector<Dynamic*>{} }
-	, mDynamicTextures{ std::vector<sf::Texture*>{} }	
-	, underPlayerControl{nullptr}
-{
-	mWnd.setPosition({ 100,55 });
-	mGameRunning = true;
-	tex.loadFromFile("assets/textures/tilesets/map1/platformer1.png");
-
-
-
-	mDynamicObjects.clear();
-	mDynamicTextures.clear();
-	mDynamicTextures.reserve(3);
-	mDynamicObjects.reserve(3);
 	
-	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::PlayerAtlas));
-	
-	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::MetalBird));
-	
-	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::BusterShot_Normal));
-
-	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::FlyPad));
-
-
-}
 
 Game::Game(sf::ContextSettings& settings)
 	: mWnd{ sf::VideoMode{1280U,768U,32U},"LuaGame",sf::Style::Close, settings }
-	, player{}
-	, player2{}
 	, tex{}
 	, mDynamicObjects{ std::vector<Dynamic*>{} }
 	, mDynamicTextures{ std::vector<sf::Texture*>{} }
@@ -252,9 +43,6 @@ Game::Game(sf::ContextSettings& settings)
 	mWnd.setPosition({ 100,55 });
 	mGameRunning = true;
 	tex.loadFromFile("assets/textures/tilesets/map1/platformer1.png");
-
-
-
 	mDynamicObjects.clear();
 	mDynamicTextures.clear();
 	mDynamicTextures.reserve(4);
@@ -263,11 +51,6 @@ Game::Game(sf::ContextSettings& settings)
 	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::MetalBird));
 	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::BusterShot_Normal));
 	mDynamicTextures.push_back(&Cfg::textures.get((int)Cfg::Textures::FlyPad));
-
-
-	
-
-
 }
 
 Game::~Game()
@@ -278,182 +61,85 @@ Game::~Game()
 		if (dyno)
 			delete dyno;
 	}
+	destroyAllManipluators(mManipulators);
+	destroyAllManipluators(mNewManipulators);
+
+	bool found = false;
+	auto it = std::find_if(mManipulators.begin(), mManipulators.end(), [&found](Manipulator* m)->bool { if (m->complete == true) found = true; return found; });
+	while (found)
+	{
+		delete (*it);
+		*it = nullptr;
+		mManipulators.erase(it);
+		mManipulators.shrink_to_fit();
+		auto it = std::find_if(mManipulators.begin(), mManipulators.end(), [&found](Manipulator* m)->bool { if (m->complete == true) found = true; return found; });
+	}
 }
 
-void Game::run()
+void Game::cleanupManipluators(std::vector<Manipulator*>& vec)
 {
-	lua_State* L = luaL_newstate();
-	luaL_openlibs(L);
-	lua_register(L, "cpp_HostFunction", mylua::lua_HostFunction);
-	if (mylua::CheckLua(L, luaL_dofile(L, "src/script-Main.lua")))
-	{
-		lua_getglobal(L, "DoAThing");
-		if (lua_isfunction(L, -1))
-		{
-			lua_pushnumber(L, 5);
-			lua_pushnumber(L, 6);
+	bool scrubbed = false;
 
-			if (mylua::CheckLua(L, lua_pcall(L, 2, 1, 0)))
+	while(!scrubbed)
+	{ 
+			if (isManipulatorCompleted(vec))
 			{
-				std::cout << "Did a thing" << std::endl;
+				scrubbed = false;
 			}
-			
 
-		}
-
-
-
-	}
-	lua_close(L);
-
-	lua_State* N = luaL_newstate();
-	luaL_openlibs(N);
-	if (mylua::CheckLua(N, luaL_dofile(N, "src/script-Main.lua")))
-	{
-		lua_getglobal(N, "GetPlayer");
-		if (lua_isfunction(N, -1))
-		{
-			lua_pushnumber(N, 0);
-			if (mylua::CheckLua(N, lua_pcall(N, 1, 1, 0)))
+			if (scrubbed == false)
 			{
-				if (lua_istable(N, -1))
+				bool found = false;
+				auto it = std::find_if(vec.begin(), vec.end(), [&found](Manipulator* m)->bool { if (m->complete == true) found = true; return found; });
+
+				if (found)
 				{
-					lua_pushstring(N, "Name");
-					lua_gettable(N, -2);
-					player.name = lua_tostring(N, -1);
-					lua_pop(N, 1);
-
-					lua_pushstring(N, "Family");
-					lua_gettable(N, -2);
-					player.family = lua_tostring(N, -1);
-					lua_pop(N, 1);
-
-					lua_pushstring(N, "Title");
-					lua_gettable(N, -2);
-					player.title = lua_tostring(N, -1);
-					lua_pop(N, 1);
-
-					lua_pushstring(N, "Level");
-					lua_gettable(N, -2);
-					player.level = (int)lua_tonumber(N, -1);
-					lua_pop(N, 1);
+					delete (*it);
+					*it = nullptr;
+					vec.erase(it);
+					vec.shrink_to_fit();
 				}
-
-			}
-			
-		}
-
-
-		lua_getglobal(N, "GetPlayer");
-		if (lua_isfunction(N, -1))
-		{
-			lua_pushnumber(N, 1);
-			if (mylua::CheckLua(N, lua_pcall(N, 1, 1, 0)))
-			{
-				if (lua_istable(N, -1))
+				else
 				{
-					lua_pushstring(N, "Name");
-					lua_gettable(N, -2);
-					player2.name = lua_tostring(N, -1);
-					lua_pop(N, 1);
-
-					lua_pushstring(N, "Family");
-					lua_gettable(N, -2);
-					player2.family = lua_tostring(N, -1);
-					lua_pop(N, 1);
-
-					lua_pushstring(N, "Title");
-					lua_gettable(N, -2);
-					player2.title = lua_tostring(N, -1);
-					lua_pop(N, 1);
-
-					lua_pushstring(N, "Level");
-					lua_gettable(N, -2);
-					player2.level = (int)lua_tonumber(N, -1);
-					lua_pop(N, 1);
+					scrubbed = true;
 				}
 			}
-			
-
-		}
-
-
 	}
-	lua_close(N);
-
-	lua_State* Lvl = luaL_newstate();
-	luaL_openlibs(Lvl);
-	lua_register(Lvl, "cpp_loadLevel", lua_loadLevel);
-	lua_register(Lvl, "cpp_setTile", lua_setTile);
-	lua_register(Lvl, "cpp_createDynamicObject", lua_createDynamicObject);
-	lua_register(Lvl, "cpp_assignPlayerControl", lua_assignPlayerControl);
-	lua_register(Lvl, "cpp_moveObject", lua_moveObject);
-	
-	if (mylua::CheckLua(Lvl, luaL_dofile(Lvl, "assets/lua_scripts/level.lua")))
-	{
-		lua_getglobal(Lvl, "LoadLevel");
-		if(lua_isfunction(Lvl, -1))
-		{
-			lua_pushlightuserdata(Lvl, this);
-			lua_pushnumber(Lvl, 1);
-			if (mylua::CheckLua(Lvl, lua_pcall(Lvl, 2, 1, 0)))
-			{
-				std::cout << "Success" << std::endl;
-			}
-		}
-
-
-
-
-
-
-
-				sf::Clock fpsTimer;
-				sf::Time elapsed;
-				while (mWnd.isOpen())
-				{
-					sf::Event e;
-					while (mWnd.pollEvent(e))
-					{
-						switch (e.type)
-						{
-						case sf::Event::Closed:
-							mGameRunning = false;
-							break;
-						case sf::Event::KeyReleased:
-							if (e.key.code == sf::Keyboard::Escape)
-								mGameRunning = false;
-							break;
-						default:
-							break;
-						}
-					}
-					elapsed = fpsTimer.restart();
-
-					
-
-			
-						update(elapsed.asSeconds(), Lvl);
-						
-
-				
-						//render game frame
-						mWnd.clear(sf::Color::Blue);
-						render();
-						mWnd.display();
-					
-
-					if (mGameRunning == false) mWnd.close();
-				}
-
-			
-		
-
-
-	}
-	lua_close(Lvl);
 }
 
+void Game::destroyAllManipluators(std::vector<Manipulator*>& vec)
+{
+
+	bool scrubbed = false;
+
+	while (!scrubbed)
+	{
+		if (vec.size() > 0 && vec.begin() != vec.end())
+		{
+			scrubbed = false;
+		}
+		else
+		{
+			scrubbed = true;
+		}
+
+		if (scrubbed == false)
+		{
+				auto it = vec.begin();
+				delete (*it);
+				*it = nullptr;
+				vec.erase(it);
+				vec.shrink_to_fit();
+		}
+	}
+}
+
+bool Game::isManipulatorCompleted(std::vector<Manipulator*>& vec)
+{
+	bool found = false;
+	auto it = std::find_if(vec.begin(), vec.end(), [&found](Manipulator* m)->bool { if (m->complete == true) found = true; return found; });
+	return found;
+}
 
 void Game::loadLevel(int w, int h)
 {
@@ -469,46 +155,6 @@ void Game::loadLevel(int w, int h)
 	}
 
 	std::cout << w << " " << h << std::endl;
-}
-
-void Game::setTile(int x, int y, int str)
-{
-
-	switch (str)
-	{
-	case 0:
-		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::Empty;
-		break;
-	case 1:
-		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::Solid;
-		break;
-	case 2:
-		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::TL;
-		break;
-	case 3:
-		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::TOP;
-		break;
-	case 4:
-		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::TR;
-		break;
-	case 5:
-		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::L;
-		break;
-	case 6:
-		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::R;
-		break;
-	case 7:
-		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::BL;
-		break;
-	case 8:
-		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::B;
-		break;
-	case 9:
-		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::BR;
-		break;
-	default:
-		break;
-	}
 }
 
 Game::Dynamic* Game::createDynamicObject(int type, float x, float y, float w, float h, int dir)
@@ -574,4 +220,3 @@ void Game::moveObject(Dynamic& dyno, float x, float y, float time)
 	mNewManipulators.emplace_back(new ManInterpPos{ std::move(tmp), x, y, time });
 	tmp = nullptr;
 }
-

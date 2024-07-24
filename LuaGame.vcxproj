@@ -142,11 +142,18 @@
     <ClCompile Include="src\action\Action.cpp" />
     <ClCompile Include="src\core\Cfg.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\render_game.cpp" />
+    <ClCompile Include="src\core\run_game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.hpp</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\util\util.cpp" />
+    <ClCompile Include="src\util\util_dynamics.cpp" />
+    <ClCompile Include="src\util\util_game.cpp" />
+    <ClCompile Include="src\util\util_manipulator.cpp" />
+    <ClCompile Include="src\util\util_tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\action\Action.hpp" />
@@ -157,6 +164,7 @@
     <ClInclude Include="src\core\ResourceManager.hpp" />
     <ClInclude Include="src\pch.hpp" />
     <ClInclude Include="src\util\lua_util.hpp" />
+    <ClInclude Include="src\util\util.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\script-Main.lua" />
