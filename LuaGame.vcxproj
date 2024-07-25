@@ -142,8 +142,13 @@
     <ClCompile Include="src\action\Action.cpp" />
     <ClCompile Include="src\core\Cfg.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\initMembers.cpp" />
+    <ClCompile Include="src\core\loadAnimations.cpp" />
     <ClCompile Include="src\core\render_game.cpp" />
     <ClCompile Include="src\core\run_game.cpp" />
+    <ClCompile Include="src\entity\Entity.cpp" />
+    <ClCompile Include="src\entity\EntityHandle.cpp" />
+    <ClCompile Include="src\entity\EntityMgr.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -162,6 +167,9 @@
     <ClInclude Include="src\core\Cfg.hpp" />
     <ClInclude Include="src\core\Game.hpp" />
     <ClInclude Include="src\core\ResourceManager.hpp" />
+    <ClInclude Include="src\entity\Entity.hpp" />
+    <ClInclude Include="src\entity\EntityHandle.hpp" />
+    <ClInclude Include="src\entity\EntityMgr.hpp" />
     <ClInclude Include="src\pch.hpp" />
     <ClInclude Include="src\util\lua_util.hpp" />
     <ClInclude Include="src\util\util.hpp" />
@@ -170,6 +178,7 @@
     <Text Include="src\script-Main.lua" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\lua_scripts\entity.lua" />
     <None Include="assets\lua_scripts\level.lua" />
     <None Include="src\action\tpl\ActionMap.tpl" />
     <None Include="src\action\tpl\ActionTarget.tpl" />

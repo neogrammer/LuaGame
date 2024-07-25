@@ -76,6 +76,12 @@
     <Filter Include="src\util">
       <UniqueIdentifier>{4a8e9dc5-c41e-4679-82d8-6b1b3ad3d4d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\entity">
+      <UniqueIdentifier>{b148f2d7-bff2-4a3e-8bc6-ed3b44d47912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\entity">
+      <UniqueIdentifier>{a527ec5d-3cbc-4c87-8c9c-199d1d58d9c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -114,6 +120,21 @@
     <ClCompile Include="src\util\util_manipulator.cpp">
       <Filter>src\util</Filter>
     </ClCompile>
+    <ClCompile Include="src\entity\EntityMgr.cpp">
+      <Filter>src\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\Entity.cpp">
+      <Filter>src\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\EntityHandle.cpp">
+      <Filter>src\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\initMembers.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\loadAnimations.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.hpp">
@@ -143,6 +164,15 @@
     <ClInclude Include="src\util\util.hpp">
       <Filter>headers\util</Filter>
     </ClInclude>
+    <ClInclude Include="src\entity\Entity.hpp">
+      <Filter>headers\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\EntityMgr.hpp">
+      <Filter>headers\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\EntityHandle.hpp">
+      <Filter>headers\entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\lua_scripts\level.lua">
@@ -156,6 +186,9 @@
     </None>
     <None Include="src\action\tpl\ActionTarget.tpl">
       <Filter>headers\action\tpl</Filter>
+    </None>
+    <None Include="assets\lua_scripts\entity.lua">
+      <Filter>assets\lua_scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

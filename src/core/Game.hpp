@@ -30,11 +30,30 @@ class Game
 
 	// Dynamic Objects
 	struct Dynamic
-	{  	virtual ~Dynamic() = default;
+	{  
+		Dynamic() = default;
+		Dynamic(const Dynamic&) = default;
+		Dynamic& operator=(const Dynamic&) = default;
+		Dynamic& operator=(Dynamic&&) = default;
+		Dynamic(Dynamic&&) = default;
+		virtual ~Dynamic() = default;
+		void initMembers();
+		void loadAnimations();
+		std::vector<sf::IntRect> loadAnimation(int numFrames, int startCol, int startRow, int  pitch, int pitchColBegin);
 		DynamicType dType{ DynamicType::NotSet };
 		sf::Vector2f pos{0.f,0.f};
 		sf::Vector2f size = { 1.f,1.f };
 		sf::Vector2f vel{0.f,0.f};
+		sf::Vector2f speed{ 0.f,0.f };
+		int numAnims{ 0 };
+		std::string currentAnim{ "none" };
+		bool facingLeft{ true };
+
+		// if true, then the map only has a single oriented animation map, all set to true for the second part of the key
+		bool unidirectional{ false };
+		int index{ 0 };
+		// animation name, and direction facing of the image
+		std::map<std::pair<std::string, bool>, std::vector<sf::IntRect>> frames{};
 		int id{ -1 };
 		bool dead{false};
 	};
@@ -63,59 +82,54 @@ class Game
 	
 
 public:
-	Game();
-	Game(sf::ContextSettings& settings);
-	~Game();
-	void run();
+			Game() = default;
+			Game(sf::ContextSettings& settings);
+			~Game();
+			void run();
+		
+    public:  // Lua Visible functions
+			static int lua_loadLevel(lua_State* L);
+			static int lua_setTile(lua_State* L);
+			static int lua_createDynamicObject(lua_State* L);
+			static int lua_assignPlayerControl(lua_State* L);
+			static int lua_moveBullet(lua_State* L);
+			static int lua_moveObject(lua_State* L);
 
-	void cleanupManipluators(std::vector<Manipulator*>& vec);
-	void destroyAllManipluators(std::vector<Manipulator*>& vec);
-
-
-	bool isManipulatorCompleted(std::vector<Manipulator*>& vec);
-	void loadLevel(int w, int h);
-	static int lua_loadLevel(lua_State* L);
-
-	void setTile(int x, int y, int str);
-
-	static int lua_setTile(lua_State* L);
-
-	Dynamic* createDynamicObject(int type, float x, float y, float w, float h, int dir);
-
-	static int lua_createDynamicObject(lua_State* L);
+    private: // Lua non-visible counterparts
+			void setTile(int x, int y, int str);
+			void loadLevel(int w, int h);
+			void assignPlayerControl(Dynamic& dyno);
+			void drawTilemap();
+			void moveObject(Dynamic& dyno, float x, float y, float time);
+			Dynamic* createDynamicObject(int type, float x, float y, float w, float h, int dir);
 	
+	private:  // internal use only
+			void manipulate(float dt, lua_State* L);
+			void input(float dt, lua_State* L);
+			void update(float dt, lua_State* L);
+			void render();
+			void drawDynamics();
+			void cleanupManipluators(std::vector<Manipulator*>& vec);
+			void destroyAllManipluators(std::vector<Manipulator*>& vec);
+			bool isManipulatorCompleted(std::vector<Manipulator*>& vec);
 
-	void assignPlayerControl(Dynamic& dyno);
-	void drawTilemap();
-
-	static int lua_assignPlayerControl(lua_State* L);
-	
-
-	void moveObject(Dynamic& dyno, float x, float y, float time);
+private:  // hidden members
+				sf::Vector2i mLevelSize{};
+				std::vector<TileType> mLevelVec{};
+				std::vector<Dynamic*> mDynamicObjects;
+				std::vector<sf::Texture*> mDynamicTextures;
 
 
-	static int lua_moveBullet(lua_State* L);
+				Dynamic* underPlayerControl{};
+				std::vector<Dynamic*> friendlyProjectiles;
+				std::vector<Dynamic*> enemyProjectiles;
 
 
-	static int lua_moveObject(lua_State* L);
-	
-	private:
-		void manipulate(float dt, lua_State* L);
-		void input(float dt, lua_State* L);
-		void update(float dt, lua_State* L);
-		void render();
-		void drawDynamics();
-
-		sf::Vector2i mLevelSize{};
-		std::vector<TileType> mLevelVec{};
-		std::vector<Dynamic*> mDynamicObjects;
-		std::vector<sf::Texture*> mDynamicTextures;
-		Dynamic* underPlayerControl{};
-		std::vector<Manipulator*> mManipulators;
-		std::vector<Manipulator*> mNewManipulators;
-		sf::Texture tex{};
-		sf::RenderWindow mWnd;
-		bool mGameRunning{ false };
+				std::vector<Manipulator*> mManipulators;
+				std::vector<Manipulator*> mNewManipulators;
+				sf::Texture tex{};
+				sf::RenderWindow mWnd;
+				bool mGameRunning{ false };
 };
 
 #endif

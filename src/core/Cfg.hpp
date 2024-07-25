@@ -16,6 +16,7 @@ struct Cfg
 	//globals 
 	static int ScrW;
 	static int ScrH;
+	//static sol::state lua; // globals are bad, but we'll use it for simpler implementation
 	static void Initialize();
 
 	// Resource Enums 

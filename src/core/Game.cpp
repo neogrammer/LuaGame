@@ -61,6 +61,13 @@ Game::~Game()
 		if (dyno)
 			delete dyno;
 	}
+
+	for (auto& dyno : mDynamicTextures)
+	{
+		if (dyno)
+			dyno = nullptr;
+	}
+
 	destroyAllManipluators(mManipulators);
 	destroyAllManipluators(mNewManipulators);
 
@@ -154,6 +161,8 @@ void Game::loadLevel(int w, int h)
 		}
 	}
 
+
+
 	std::cout << w << " " << h << std::endl;
 }
 
@@ -202,8 +211,10 @@ Game::Dynamic* Game::createDynamicObject(int type, float x, float y, float w, fl
 	tmp->id = type;
 	tmp->pos = { x, y };
 	tmp->size = { w, h };
+
 	mDynamicObjects.emplace_back( std::move(tmp) );
-	return tmp;
+	mDynamicObjects.back()->initMembers();
+	return mDynamicObjects[(std::size_t)(mDynamicObjects.size() - 1)];
 	
 }
 

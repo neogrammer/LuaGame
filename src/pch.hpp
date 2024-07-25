@@ -8,9 +8,9 @@
 #include <action/ActionTarget.hpp>
 #include <core/Cfg.hpp>
 #include <core/Game.hpp>
-
+#include <assert.h>
 #include <iostream>
-
+#include <map>
 #include <util/lua_util.hpp>
 
 #include <vector>

@@ -11,7 +11,7 @@ void Game::drawDynamics()
 
 		spr.setTexture(*mDynamicTextures[dyno->id]);
 		spr.setPosition(my.pos);
-		spr.setTextureRect({ {0 , 0}, {(int)my.size.x, (int)my.size.y} });
+		spr.setTextureRect({ });
 
 		mWnd.draw(spr);
 	}
