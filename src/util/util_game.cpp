@@ -11,7 +11,7 @@ void Game::drawDynamics()
 
 		spr.setTexture(*mDynamicTextures[dyno->id]);
 		spr.setPosition(my.pos);
-		spr.setTextureRect({ });
+		spr.setTextureRect(my.frames.at(std::pair(my.currentAnim, my.facingLeft)).at(my.index));
 
 		mWnd.draw(spr);
 	}

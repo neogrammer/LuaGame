@@ -16,6 +16,7 @@ void Game::Dynamic::loadAnimations()
 		  // left animations
 		  this->frames.emplace(std::pair{ "idle", true }, std::move(loadAnimation(3, 0, 14, 3, 0)));
 		  this->currentAnim = "idle";
+		  this->facingLeft = false;
 		//... 
 	}
 		break;
