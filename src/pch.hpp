@@ -11,11 +11,17 @@
 #include <assert.h>
 #include <iostream>
 #include <map>
-#include <util/lua_util.hpp>
 #include <fstream>
 #include <vector>
 #include <stdlib.h>
 #include <string.h>
 #include <utility>
 #include <iterator>
+
+#define SOL_ALL_SAFETIES_ON 1
+#include "sol/sol.hpp"
+#pragma comment(lib, "lua54.lib")
+
+
+
 #endif // PCH_H__
