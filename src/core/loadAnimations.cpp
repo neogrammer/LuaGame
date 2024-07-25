@@ -1,4 +1,5 @@
 #include <pch.hpp>
+#include "Game.hpp"
 
 void Game::Dynamic::loadAnimations()
 {
@@ -11,12 +12,19 @@ void Game::Dynamic::loadAnimations()
 		break;
 	case DynamicType::Player:
 	{
+		this->currentAnim = "idle";
+		this->facingLeft = false;
 			// right animations
 		this->frames.emplace(std::pair{ "idle", false }, std::move(loadAnimation(3, 0, 1, 3, 0)));
+		this->animData.emplace(std::pair{ "idle", false }, AnimData{});
+		this->animData[std::pair("idle", false)].animDelay = 0.3f;
+		this->animData[std::pair("idle", false)].pauseDelay = 0.f;
 		  // left animations
 		  this->frames.emplace(std::pair{ "idle", true }, std::move(loadAnimation(3, 0, 14, 3, 0)));
-		  this->currentAnim = "idle";
-		  this->facingLeft = false;
+		  this->animData.emplace(std::pair{ "idle", true }, AnimData{});
+		  this->animData[std::pair("idle", true)].animDelay = 0.3f;
+		  this->animData[std::pair("idle", true)].pauseDelay = 0.f;
+		  this->loadBBoxes("assets/bboxes/player/player.bbox");
 		//... 
 	}
 		break;
@@ -24,26 +32,45 @@ void Game::Dynamic::loadAnimations()
 	case DynamicType::MetalBird:
 	{
 		//  animations
-		this->frames.emplace(std::pair{ "idle", true }, std::move(loadAnimation(7, 0, 0, 7, 0)));
 		this->currentAnim = "idle";
+		this->facingLeft = true;
+		this->frames.emplace(std::pair{ "idle", true }, std::move(loadAnimation(7, 0, 0, 7, 0)));
+		this->animData.emplace(std::pair{ "idle", true }, AnimData{});
+		this->animData[std::pair("idle", true)].animDelay = 0.3f;
+		this->animData[std::pair("idle", true)].pauseDelay = 4.f;
+		this->loadBBoxes("assets/bboxes/enemies/metal_bird.bbox");
 	}
 		break;
 
 	case DynamicType::FlyPad:
 	{
 		//  animations
-		this->frames.emplace(std::pair{ "idle", true }, std::move(loadAnimation(3, 0, 0, 3, 0)));
 		this->currentAnim = "idle";
+		this->facingLeft = true;
+		this->frames.emplace(std::pair{ "idle", true }, std::move(loadAnimation(3, 0, 0, 3, 0)));
+		this->animData.emplace(std::pair{ "idle", true }, AnimData{});
+		this->animData[std::pair("idle", true)].animDelay = 0.3f;
+		this->animData[std::pair("idle", true)].pauseDelay = 0.f;
+		this->loadBBoxes("assets/bboxes/platforms/fly_pad.bbox");
 	}
 		break;
 
 	case DynamicType::BusterShot_Normal:
 	{
 		// right animations
+		this->currentAnim = "idle";
+		this->facingLeft = false;
 		this->frames.emplace(std::pair{ "idle", false }, std::move(loadAnimation(5, 0, 0, 5, 0)));
+		this->animData[std::pair("idle", false)].animDelay = 0.3f;
+		this->animData[std::pair("idle", false)].pauseDelay = 0.f;
+		this->animData.emplace(std::pair{ "idle", false }, AnimData{});
+
 		// left animations
 		this->frames.emplace(std::pair{ "idle", true }, std::move(loadAnimation(5, 0, 1, 5, 0)));
-		this->currentAnim = "idle";
+		this->animData.emplace(std::pair{ "idle", true }, AnimData{});
+		this->animData[std::pair("idle", true)].animDelay = 0.3f;
+		this->animData[std::pair("idle", true)].pauseDelay = 0.f;
+		this->loadBBoxes("assets/bboxes/projectiles/buster_shot_normal.bbox");
 	}
 		break;
 	default:
@@ -52,6 +79,8 @@ void Game::Dynamic::loadAnimations()
 	}
 	this->index = 0;
 }
+
+
 
 
 std::vector<sf::IntRect> Game::Dynamic::loadAnimation(int numFrames, int startCol, int startRow, int  pitch, int pitchColBegin)
@@ -85,6 +114,9 @@ std::vector<sf::IntRect> Game::Dynamic::loadAnimation(int numFrames, int startCo
 	}
 	//handled like a pimp
 	this->numAnims++;
-	return std::move(temp);
+
+	return temp;
 }
+
+
 

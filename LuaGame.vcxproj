@@ -142,6 +142,9 @@
     <ClCompile Include="src\action\Action.cpp" />
     <ClCompile Include="src\core\Cfg.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\game_dynamics_update.cpp" />
+    <ClCompile Include="src\core\game_dynamic_animation.cpp" />
+    <ClCompile Include="src\core\game_dynamic_animation_bboxes.cpp" />
     <ClCompile Include="src\core\initMembers.cpp" />
     <ClCompile Include="src\core\loadAnimations.cpp" />
     <ClCompile Include="src\core\render_game.cpp" />
@@ -178,6 +181,10 @@
     <Text Include="src\script-Main.lua" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\bboxes\enemies\metal_bird.bbox" />
+    <None Include="assets\bboxes\platforms\fly_pad.bbox" />
+    <None Include="assets\bboxes\player\player.bbox" />
+    <None Include="assets\bboxes\projectiles\buster_shot_normal.bbox" />
     <None Include="assets\lua_scripts\entity.lua" />
     <None Include="assets\lua_scripts\level.lua" />
     <None Include="src\action\tpl\ActionMap.tpl" />

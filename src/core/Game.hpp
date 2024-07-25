@@ -31,6 +31,34 @@ class Game
 	// Dynamic Objects
 	struct Dynamic
 	{  
+		struct AnimData
+		{
+			std::string name{ "none" };
+			std::string fallbackName{ "none" };
+			int numFrames{ };
+			int index{ };
+			float animDelay{};
+			float pauseDelay{};
+			bool playing{ true };
+			bool facingLeft{ true };
+			bool onLastFrame{ false };
+			bool looping{ true };
+			int repeatTimes{ 1 };
+
+			std::vector<sf::IntRect> bbox{};
+			
+			bool isOnLastFrame();
+
+			int getIndex();
+			sf::IntRect getBBox();
+			void animate();
+			void resetData();
+			void play();
+			void stop();
+			void pause();
+			void resume();
+		};
+
 		Dynamic() = default;
 		Dynamic(const Dynamic&) = default;
 		Dynamic& operator=(const Dynamic&) = default;
@@ -39,23 +67,31 @@ class Game
 		virtual ~Dynamic() = default;
 		void initMembers();
 		void loadAnimations();
+		void loadBBoxes(const std::string& filename);
+		bool hasBBoxesSet(const std::string animname, bool facingleft);
 		std::vector<sf::IntRect> loadAnimation(int numFrames, int startCol, int startRow, int  pitch, int pitchColBegin);
 		DynamicType dType{ DynamicType::NotSet };
 		sf::Vector2f pos{0.f,0.f};
 		sf::Vector2f size = { 1.f,1.f };
 		sf::Vector2f vel{0.f,0.f};
 		sf::Vector2f speed{ 0.f,0.f };
+		bool animPaused{ true };
 		int numAnims{ 0 };
 		std::string currentAnim{ "none" };
+		std::string nextAnim{ "none" };
 		bool facingLeft{ true };
-
+	
+		float elapsed{};
+		float pauseElapsed{};
 		// if true, then the map only has a single oriented animation map, all set to true for the second part of the key
 		bool unidirectional{ false };
 		int index{ 0 };
 		// animation name, and direction facing of the image
 		std::map<std::pair<std::string, bool>, std::vector<sf::IntRect>> frames{};
+		std::map<std::pair<std::string, bool>, AnimData> animData{};
 		int id{ -1 };
 		bool dead{false};
+		void update(float dt);
 	};
 
 	struct DynBullet : Dynamic

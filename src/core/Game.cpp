@@ -7,10 +7,24 @@ void Game::input(float dt, lua_State* L)
 	{
 
 		underPlayerControl->vel = { 0.f, 0.f };
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) underPlayerControl->vel += { 0.f, -50.f};
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) underPlayerControl->vel += { -50.f, 0.f};
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) underPlayerControl->vel += { 0.f, 50.f};
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) underPlayerControl->vel += { 50.f, 0.f};
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		{
+			underPlayerControl->vel += { 0.f, -50.f};
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		{
+			underPlayerControl->vel += { -50.f, 0.f};
+			underPlayerControl->facingLeft = true;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			underPlayerControl->vel += { 0.f, 50.f};
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			underPlayerControl->vel += { 50.f, 0.f};
+			underPlayerControl->facingLeft = false;
+		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
@@ -26,9 +40,11 @@ void Game::input(float dt, lua_State* L)
 void Game::update(float dt, lua_State* L)
 {
 	manipulate(dt, L);
-	
-
 	input(dt, L);
+	for (auto& dyno : mDynamicObjects)
+	{
+		dyno->update(dt);
+	}
 }
 
 	
