@@ -9,6 +9,8 @@ void Game::run()
 	L.safe_script_file("assets/lua_scripts/level.lua");
 	{
 
+		
+
 		L.set_function("cpp_setTile", &Game::setTile, this);
 		L.set_function("cpp_loadLevel", &Game::ummLoadLevel, this);
 		L.set_function("cpp_createDynamicObject", &Game::createDynamicObject, this);
@@ -37,7 +39,10 @@ void Game::run()
 				switch (e.type)
 				{
 				case sf::Event::Closed: 	mGameRunning = false; break;
-				case sf::Event::KeyReleased: 	if (e.key.code == sf::Keyboard::Escape)  mGameRunning = false;  break;
+				case sf::Event::KeyReleased: 	
+					if (e.key.code == sf::Keyboard::Escape)  mGameRunning = false; 
+					if (e.key.code == sf::Keyboard::B) mShowBBoxes = !mShowBBoxes;
+					break;
 				default: break;
 				}
 			}

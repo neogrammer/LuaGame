@@ -3,6 +3,16 @@
 
 void Game::input(float dt, sol::state& L)
 {
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+	{
+		std::cout << std::endl;
+		for (int i = 0; i < mDynamicObjects.size(); i++)
+		{
+			std::cout << mDynamicObjects[i]->id << " is the id of object i, i=" << i << " in the collection, and its bbox is : left - " << mDynamicObjects[i]->getAABB().left << ", top - " << mDynamicObjects[i]->getAABB().top << ", width - " << mDynamicObjects[i]->getAABB().width << ", height - " << mDynamicObjects[i]->getAABB().height << "\n";
+		}
+		std::cout << std::endl;
+	}
 	if (underPlayerControl)
 	{
 

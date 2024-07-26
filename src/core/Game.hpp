@@ -63,9 +63,11 @@ class Game
 		void loadAnimations();
 		void loadBBoxes(const std::string& filename);
 		bool hasBBoxesSet(const std::string animname, bool facingleft);
+		sf::FloatRect& getAABB();
 		std::vector<sf::IntRect> loadAnimation(int numFrames, int startCol, int startRow, int  pitch, int pitchColBegin);
 		DynamicType dType{ DynamicType::NotSet };
 		sf::Vector2f pos{0.f,0.f};
+		sf::FloatRect aabb{};
 		sf::Vector2f size = { 1.f,1.f };
 		sf::Vector2f vel{0.f,0.f};
 		sf::Vector2f speed{ 0.f,0.f };
@@ -146,6 +148,7 @@ public:
 			bool isManipulatorCompleted(std::vector<Manipulator*>& vec);
 
 private:  // hidden members
+				bool mShowBBoxes{ false };
 				sf::Vector2i mLevelSize{};
 				std::vector<TileType> mLevelVec{};
 				std::vector<Dynamic*> mDynamicObjects;
@@ -165,6 +168,7 @@ private:  // hidden members
 				sf::Texture tex{};
 				sf::RenderWindow mWnd;
 				bool mGameRunning{ false };
+				const int tileSize{ 32 };
 };
 
 #endif

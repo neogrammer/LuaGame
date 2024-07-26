@@ -50,5 +50,16 @@ bool Game::Dynamic::hasBBoxesSet(const std::string animname, bool facingleft)
 	return false;
 }
 
+sf::FloatRect& Game::Dynamic::getAABB()
+{
+	sf::IntRect bbox = this->animData[std::pair(this->currentAnim, this->facingLeft)].getBBox();
+	this->aabb.left = this->pos.x + (float)bbox.left;
+	this->aabb.top = this->pos.y + (float)bbox.top;
+	this->aabb.width = (float)bbox.width;
+	this->aabb.height = (float)bbox.height;
+
+	return aabb;
+}
+
 
 

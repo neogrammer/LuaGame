@@ -43,24 +43,24 @@ void Game::drawTilemap()
 			{
 				sf::Sprite spr{};
 				spr.setTexture(tex);
-				spr.setTextureRect({ {7 * 32, 0}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
+				spr.setTextureRect({ {7 * tileSize, 0}, {tileSize, tileSize} });
+				spr.setPosition({ (float)tile.x * (float)tileSize, (float)tile.y * (float)tileSize });
 				mWnd.draw(spr);
 			}	break;
 			case TileType::TL:
 			{
 				sf::Sprite spr{};
 				spr.setTexture(tex);
-				spr.setTextureRect({ {0 * 32, 0}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
+				spr.setTextureRect({ {0 * tileSize, 0}, {tileSize, tileSize} });
+				spr.setPosition({ (float)tile.x * (float)tileSize, (float)tile.y * (float)tileSize });
 				mWnd.draw(spr);
 			}	break;
 			case TileType::TOP:
 			{
 				sf::Sprite spr{};
 				spr.setTexture(tex);
-				spr.setTextureRect({ {1 * 32, 0}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
+				spr.setTextureRect({ {1 * tileSize, 0}, {tileSize, tileSize} });
+				spr.setPosition({ (float)tile.x * (float)tileSize, (float)tile.y * (float)tileSize });
 				mWnd.draw(spr);
 			}
 			break;
@@ -68,8 +68,8 @@ void Game::drawTilemap()
 			{
 				sf::Sprite spr{};
 				spr.setTexture(tex);
-				spr.setTextureRect({ {2 * 32, 0}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
+				spr.setTextureRect({ {2 * tileSize, 0}, {tileSize, tileSize} });
+				spr.setPosition({ (float)tile.x * (float)tileSize, (float)tile.y * (float)tileSize });
 				mWnd.draw(spr);
 			}
 			break;
@@ -77,8 +77,8 @@ void Game::drawTilemap()
 			{
 				sf::Sprite spr{};
 				spr.setTexture(tex);
-				spr.setTextureRect({ {6 * 32, 0}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
+				spr.setTextureRect({ {6 * tileSize, 0}, {tileSize, tileSize} });
+				spr.setPosition({ (float)tile.x * (float)tileSize, (float)tile.y * (float)tileSize });
 				mWnd.draw(spr);
 			}
 			break;
@@ -86,8 +86,8 @@ void Game::drawTilemap()
 			{
 				sf::Sprite spr{};
 				spr.setTexture(tex);
-				spr.setTextureRect({ {0 * 32, 32}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
+				spr.setTextureRect({ {0 * tileSize, tileSize}, {tileSize, tileSize} });
+				spr.setPosition({ (float)tile.x * (float)tileSize, (float)tile.y * (float)tileSize });
 				mWnd.draw(spr);
 			}
 			break;
@@ -95,8 +95,8 @@ void Game::drawTilemap()
 			{
 				sf::Sprite spr{};
 				spr.setTexture(tex);
-				spr.setTextureRect({ {96, 64}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
+				spr.setTextureRect({ {3 * tileSize, 2 * tileSize}, {tileSize, tileSize} });
+				spr.setPosition({ (float)tile.x * (float)tileSize, (float)tile.y * (float)tileSize });
 				mWnd.draw(spr);
 			}
 			break;
@@ -104,8 +104,8 @@ void Game::drawTilemap()
 			{
 				sf::Sprite spr{};
 				spr.setTexture(tex);
-				spr.setTextureRect({ {32, 64}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
+				spr.setTextureRect({ {tileSize, 2 * tileSize}, {tileSize, tileSize} });
+				spr.setPosition({ (float)tile.x * (float)tileSize, (float)tile.y * (float)tileSize });
 				mWnd.draw(spr);
 			}
 			break;
@@ -113,8 +113,8 @@ void Game::drawTilemap()
 			{
 				sf::Sprite spr{};
 				spr.setTexture(tex);
-				spr.setTextureRect({ {64, 64}, {32, 32} });
-				spr.setPosition({ (float)tile.x * 32.f, (float)tile.y * 32.f });
+				spr.setTextureRect({ {2 * tileSize, 2 * tileSize}, {tileSize, tileSize} });
+				spr.setPosition({ (float)tile.x * (float)tileSize, (float)tile.y * (float)tileSize });
 				mWnd.draw(spr);
 			}
 			break;
