@@ -10,6 +10,7 @@ void Game::render()
 	
 	if (mShowBBoxes)
 	{
+		
 		for (int y = 0; y < mLevelSize.y; y++)
 		{
 			for (int x = 0; x < mLevelSize.x; x++)
@@ -23,12 +24,15 @@ void Game::render()
 				else
 				{
 					sf::RectangleShape shp;
-					shp.setSize({ (float)tileSize,(float)tileSize });
+					shp.setSize({ (float)tileSize - 1.f,(float)tileSize -1.f });
 					shp.setPosition({ (float)(x * tileSize), (float)(y * tileSize) });
 					shp.setFillColor(sf::Color::Transparent);
-					shp.setOutlineThickness(2);
+					shp.setOutlineThickness(1);
 					shp.setOutlineColor(sf::Color::Red);
 					mWnd.draw(shp);
+
+			
+
 				}
 			}
 		}
@@ -36,13 +40,14 @@ void Game::render()
 		for (auto& dyno : mDynamicObjects)
 		{
 			sf::RectangleShape shp;
-			shp.setSize({ dyno->getAABB().width,dyno->getAABB().height});
+			shp.setSize({ dyno->getAABB().width -1.f ,dyno->getAABB().height - 1.f});
 			shp.setPosition({ dyno->getAABB().left,dyno->getAABB().top});
 			shp.setFillColor(sf::Color::Transparent);
-			shp.setOutlineThickness(2);
+			shp.setOutlineThickness(1);
 			shp.setOutlineColor(sf::Color::Red);
 		
 			mWnd.draw(shp);
+		
 		}
 
 

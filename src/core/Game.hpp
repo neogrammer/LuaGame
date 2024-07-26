@@ -63,7 +63,11 @@ class Game
 		void loadAnimations();
 		void loadBBoxes(const std::string& filename);
 		bool hasBBoxesSet(const std::string animname, bool facingleft);
+		void setAABB();
 		sf::FloatRect& getAABB();
+		sf::FloatRect getAABBNoChange();
+
+		sf::Vector2f getCenterOffset();
 		std::vector<sf::IntRect> loadAnimation(int numFrames, int startCol, int startRow, int  pitch, int pitchColBegin);
 		DynamicType dType{ DynamicType::NotSet };
 		sf::Vector2f pos{0.f,0.f};

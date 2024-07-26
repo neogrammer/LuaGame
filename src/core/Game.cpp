@@ -19,7 +19,7 @@ void Game::input(float dt, sol::state& L)
 		underPlayerControl->vel = { 0.f, 0.f };
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			underPlayerControl->vel += { 0.f, -50.f};
+			//underPlayerControl->vel += { 0.f, -50.f};
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
@@ -28,7 +28,7 @@ void Game::input(float dt, sol::state& L)
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			underPlayerControl->vel += { 0.f, 50.f};
+			//underPlayerControl->vel += { 0.f, 50.f};
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
@@ -41,8 +41,12 @@ void Game::input(float dt, sol::state& L)
 
 		}
 		// DO PLAYER COLLISIONS HERE
-		underPlayerControl->pos += underPlayerControl->vel * dt;
+		if (!(underPlayerControl->vel.x == 0.f && underPlayerControl->vel.y == 0.f))
+		{
 
+
+			underPlayerControl->pos += underPlayerControl->vel * dt;
+		}
 	}
 
 }

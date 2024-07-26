@@ -14,6 +14,19 @@ void Game::drawDynamics()
 		spr.setTextureRect(my.frames.at(std::pair(my.currentAnim, my.facingLeft)).at(my.index));
 
 		mWnd.draw(spr);
+		if (mShowBBoxes)
+		{
+			sf::CircleShape circ{ 5.f };
+			circ.setFillColor(sf::Color::Yellow);
+			circ.setOrigin({ 2.5f, 2.5f });
+			circ.setPosition({ spr.getOrigin().x + ((float)spr.getTextureRect().width / 2.f) + spr.getPosition().x,spr.getOrigin().y + ((float)spr.getTextureRect().height / 2.f) + spr.getPosition().y });
+			mWnd.draw(circ);
+			sf::CircleShape circ2{ 5.f };
+			circ2.setFillColor(sf::Color::Green);
+			circ2.setOrigin({ 2.5f, 2.5f });
+			circ2.setPosition({ dyno->getAABB().left + (dyno->getAABB().width / 2.f) , dyno->getAABB().top + (dyno->getAABB().height / 2.f) });
+			mWnd.draw(circ2);
+		}
 	}
 }
 

@@ -50,6 +50,27 @@ bool Game::Dynamic::hasBBoxesSet(const std::string animname, bool facingleft)
 	return false;
 }
 
+void Game::Dynamic::setAABB()
+{
+	sf::IntRect bbox = this->animData[std::pair(this->currentAnim, this->facingLeft)].getBBox();
+	this->aabb.left = this->pos.x + (float)bbox.left;
+	this->aabb.top = this->pos.y + (float)bbox.top;
+	this->aabb.width = (float)bbox.width;
+	this->aabb.height = (float)bbox.height;
+}
+
+sf::FloatRect Game::Dynamic::getAABBNoChange()
+{
+	sf::IntRect bbox = this->animData[std::pair(this->currentAnim, this->facingLeft)].getBBox();
+	sf::FloatRect tmp{};
+	tmp.left = this->pos.x + (float)bbox.left;
+	tmp.top = this->pos.y + (float)bbox.top;
+	tmp.width = (float)bbox.width;
+	tmp.height = (float)bbox.height;
+
+	return tmp;
+}
+
 sf::FloatRect& Game::Dynamic::getAABB()
 {
 	sf::IntRect bbox = this->animData[std::pair(this->currentAnim, this->facingLeft)].getBBox();
@@ -59,6 +80,31 @@ sf::FloatRect& Game::Dynamic::getAABB()
 	this->aabb.height = (float)bbox.height;
 
 	return aabb;
+}
+
+sf::Vector2f Game::Dynamic::getCenterOffset()
+{
+	
+	sf::Sprite spr = sf::Sprite{};
+	auto& my = *this;
+	
+	spr.setTexture(Cfg::textures.get(my.id));
+	spr.setPosition(my.pos);
+	spr.setTextureRect(my.frames.at(std::pair(my.currentAnim, my.facingLeft)).at(my.index));
+
+		sf::CircleShape circ{ 5.f };
+		circ.setFillColor(sf::Color::Yellow);
+		circ.setOrigin({ 2.5f, 2.5f });
+		circ.setPosition({ spr.getOrigin().x + ((float)spr.getTextureRect().width / 2.f) + spr.getPosition().x,spr.getOrigin().y + ((float)spr.getTextureRect().height / 2.f) + spr.getPosition().y });
+
+		sf::CircleShape circ2{ 5.f };
+		circ2.setFillColor(sf::Color::Green);
+		circ2.setOrigin({ 2.5f, 2.5f });
+		circ2.setPosition({ my.getAABBNoChange().left + (my.getAABBNoChange().width / 2.f) , my.getAABBNoChange().top + (my.getAABBNoChange().height / 2.f) });
+
+		sf::Vector2f offset = { circ2.getPosition().x - circ.getPosition().x, circ2.getPosition().y - circ.getPosition().y };
+
+		return offset;
 }
 
 
