@@ -82,6 +82,16 @@ sf::FloatRect& Game::Dynamic::getAABB()
 	return aabb;
 }
 
+sf::Vector2f Game::Dynamic::getAABBCenter()
+{
+	return { this->getAABB().getPosition().x + (this->getAABB().getSize().x / 2.f), this->getAABB().getPosition().y + (this->getAABB().getSize().y / 2.f) };
+}
+
+sf::Vector2f Game::Dynamic::getAABBHalfSize()
+{
+	return { this->getAABB().getSize().x / 2.f, this->getAABB().getSize().y / 2.f };
+}
+
 sf::Vector2f Game::Dynamic::getCenterOffset()
 {
 	
