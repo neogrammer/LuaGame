@@ -3,42 +3,51 @@
 
 void Game::run()
 {
-	lua_State* Lvl = luaL_newstate();
-	luaL_openlibs(Lvl);
-	lua_register(Lvl, "cpp_loadLevel", lua_loadLevel);
-	lua_register(Lvl, "cpp_setTile", lua_setTile);
-	lua_register(Lvl, "cpp_createDynamicObject", lua_createDynamicObject);
-	lua_register(Lvl, "cpp_assignPlayerControl", lua_assignPlayerControl);
-	lua_register(Lvl, "cpp_moveObject", lua_moveObject);
-	lua_register(Lvl, "cpp_moveBullet", lua_moveBullet);
-	if (mylua::CheckLua(Lvl, luaL_dofile(Lvl, "assets/lua_scripts/level.lua")))
+
+	sol::state L{};
+	L.open_libraries(sol::lib::base, sol::lib::bit32, sol::lib::coroutine, sol::lib::debug, sol::lib::ffi, sol::lib::io, sol::lib::jit, sol::lib::math, sol::lib::os, sol::lib::package, sol::lib::string, sol::lib::table, sol::lib::utf8);
+	L.safe_script_file("assets/lua_scripts/level.lua");
 	{
 
-		lua_getglobal(Lvl, "LoadLevel");
-		if (lua_isfunction(Lvl, -1))
-		{	lua_pushlightuserdata(Lvl, this); 	lua_pushnumber(Lvl, 1);
-				if (mylua::CheckLua(Lvl, lua_pcall(Lvl, 2, 1, 0)))
-				{
-						std::cout << "Success" << std::endl;
-				}
+		L.set_function("cpp_setTile", &Game::setTile, this);
+		L.set_function("cpp_loadLevel", &Game::ummLoadLevel, this);
+		L.set_function("cpp_createDynamicObject", &Game::createDynamicObject, this);
+		L.set_function("cpp_assignPlayerControl", &Game::assignPlayerControl, this);
+		L.set_function("cpp_moveObject", &Game::moveObject, this);
+
+	    L["LoadLevel"](1);
+		
+
+
+		sol::coroutine loop_coroutine = L["loop"];
+		L["counter"] = 20;
+
+		for (int counter = 0; counter < 10 && loop_coroutine; ++counter)
+		{
+			int value = loop_coroutine();
+			std::cout << "In C++: " << value << std::endl;
 		}
-		sf::Clock fpsTimer;	sf::Time elapsed;
+
+		sf::Clock fpsTimer;	
+		sf::Time elapsed;
 		while (mWnd.isOpen())
 		{
 			sf::Event e;	while (mWnd.pollEvent(e))
-									{ switch (e.type)
-											{
-												case sf::Event::Closed: 	mGameRunning = false; break;
-												case sf::Event::KeyReleased: 	if (e.key.code == sf::Keyboard::Escape)  mGameRunning = false;  break;
-												default: break;
-										   }  
-			 }
+			{
+				switch (e.type)
+				{
+				case sf::Event::Closed: 	mGameRunning = false; break;
+				case sf::Event::KeyReleased: 	if (e.key.code == sf::Keyboard::Escape)  mGameRunning = false;  break;
+				default: break;
+				}
+			}
 			elapsed = fpsTimer.restart();
-			update(elapsed.asSeconds(), Lvl);
+			update(elapsed.asSeconds(), L);
 			mWnd.clear(sf::Color::Blue);
 			render();
 			mWnd.display();
 			if (mGameRunning == false) mWnd.close();
 		}
-    }	lua_close(Lvl);
+	}
+	
 }

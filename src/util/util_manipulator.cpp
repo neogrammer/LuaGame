@@ -1,7 +1,7 @@
 #include <pch.hpp>
 #include "util/lua_util.hpp"
 
-void Game::manipulate(float dt, lua_State* L)
+void Game::manipulate(float dt, sol::state& L)
 {
 	for (auto& m : mNewManipulators)
 	{
@@ -18,31 +18,61 @@ void Game::manipulate(float dt, lua_State* L)
 		{
 			if (m->dyno->dType == DynamicType::BusterShot_Normal)
 			{
-				lua_getglobal(L, "IssueNextHorizTask");
-				if (L, lua_isfunction(L, -1))
-				{
-					lua_pushlightuserdata(L, this);
-					lua_pushlightuserdata(L, m->dyno);
-					lua_pushnumber(L, dynamic_cast<DynBullet*>(m->dyno)->maxDist);
-					lua_pushnumber(L, m->dyno->pos.y);
-					if (!mylua::CheckLua(L, lua_pcall(L, 4, 1, 0)))
-					{
-						// script bad
-					}
-				}
+			
+				
+				L["IssueNextHorizTask"](m->dyno, dynamic_cast<DynBullet*>(m->dyno)->maxDist, m->dyno->pos.y);
+				//L["IssueNextHorizTask"]( &m->dyno, dynamic_cast<DynBullet*>(m->dyno)->maxDist, m->dyno->pos.y);
+
+				//lua_getglobal(L, "IssueNextHorizTask");
+				//if (L, lua_isfunction(L, -1))
+				//{
+				//	lua_pushlightuserdata(L, this);
+				//	lua_pushlightuserdata(L, m->dyno);
+				//	lua_pushnumber(L, dynamic_cast<DynBullet*>(m->dyno)->maxDist);
+				//	lua_pushnumber(L, m->dyno->pos.y);
+				//	if (!mylua::CheckLua(L, lua_pcall(L, 4, 1, 0)))
+				//	{
+				//		// script bad
+				//	}
+				//}
 			}
 			else
 			{
-				lua_getglobal(L, "IssueNextTask");
-				if (L, lua_isfunction(L, -1))
+
+				
+					L["loopFlyPad"]();
+
+				//	L["IssueNextTask"](m->dyno, dynamic_cast<DynBullet*>(m->dyno)->maxDist, m->dyno->pos.y);
+
+
+	
+				
+			
+
+				
+
+			/*	sol::protected_function func = L["IssueNextTask"];
+				if (func.valid())
 				{
-					lua_pushlightuserdata(L, this);
-					lua_pushlightuserdata(L, m->dyno);
-					if (!mylua::CheckLua(L, lua_pcall(L, 2, 1, 0)))
-					{
-						// script bad
-					}
+
 				}
+				else
+				{
+
+
+
+				}*/
+
+				//lua_getglobal(L, "IssueNextTask");
+				//if (L, lua_isfunction(L, -1))
+				//{
+				//	lua_pushlightuserdata(L, this);
+				//	lua_pushlightuserdata(L, m->dyno);
+				//	if (!mylua::CheckLua(L, lua_pcall(L, 2, 1, 0)))
+				//	{
+				//		// script bad
+				//	}
+				//}
 			}
 		}
 	}

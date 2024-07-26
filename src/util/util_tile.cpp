@@ -1,10 +1,11 @@
 #include <pch.hpp>
+#include <core/Game.hpp>
 
 
-void Game::setTile(int x, int y, int str)
+void Game::setTile(int x, int y, int t)
 {
 
-	switch (str)
+	switch (t)
 	{
 	case 0:
 		mLevelVec[(uint8_t)y * mLevelSize.x + x] = TileType::Empty;
@@ -38,6 +39,77 @@ void Game::setTile(int x, int y, int str)
 		break;
 	default:
 		break;
+	}
+}
+
+void Game::ummLoadLevel(int w, int h, int level)
+{
+	if (level == 1)
+	{
+		mLevelSize = { w, h };
+		mLevelVec.clear();
+		mLevelVec.reserve((uint8_t)w * h);
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				mLevelVec.emplace_back(TileType::Empty);
+			}
+		}
+		std::string map;
+		map.append("........................................");
+		map.append("........................................");
+		map.append("........................................");
+		map.append("..............................QWWWWWWWWW");
+		map.append("............QWWE..............ASSS######");
+		map.append("WWWWWE......A##R..................AS####");
+		map.append("##SSSD.......A#R....................AS##");
+		map.append("#R............LR......................L#");
+		map.append("#R............LR......................L#");
+		map.append("#R............LR......................L#");
+		map.append("#R....QWE.....LR......................L#");
+		map.append("#R....L##WWWWW#R......................L#");
+		map.append("#R....ASSSSSSSSD......................L#");
+		map.append("#R....................................L#");
+		map.append("#R....................................L#");
+		map.append("#R....................................L#");
+		map.append("#R....................................L#");
+		map.append("#R....................................L#");
+		map.append("#R....................................L#");
+		map.append("#R....................................L#");
+		map.append("#R....................................L#");
+		map.append("#R....................................L#");
+		map.append("#R..........QWWWE.....................L#");
+		map.append("##WWWWWWWWWW#####WWWWWWWWWWWWWWWWWWWWW##");
+
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				char c = map.at(y * w + x);
+
+				if (c == '.')
+					setTile(x, y, (int)TileType::Empty);
+				else if (c == '#')
+					setTile(x, y, (int)TileType::Solid);
+				else if (c == 'Q')
+					setTile(x, y, (int)TileType::TL);
+				else if (c == 'W')
+					setTile(x, y, (int)TileType::TOP);
+				else if (c == 'E')
+					setTile(x, y, (int)TileType::TR);
+				else if (c == 'L')
+					setTile(x, y, (int)TileType::L);
+				else if (c == 'R')
+					setTile(x, y, (int)TileType::R);
+				else if (c == 'A')
+					setTile(x, y, (int)TileType::BL);
+				else if (c == 'S')
+					setTile(x, y, (int)TileType::B);
+				else  if (c == 'D')
+					setTile(x, y, (int)TileType::BR);
+			}
+		}
 	}
 }
 

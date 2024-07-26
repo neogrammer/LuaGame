@@ -17,16 +17,6 @@ void Game::drawDynamics()
 	}
 }
 
-int Game::lua_loadLevel(lua_State* L)
-{
-	if (lua_gettop(L) != 3) return -1;
-	Game* obj = static_cast<Game*>(lua_touserdata(L, 1));
-	int w = (int)lua_tointeger(L, 2);
-	int h = (int)lua_tointeger(L, 3);
-	obj->loadLevel(w, h);
-	return 0;
-}
-
 int Game::lua_assignPlayerControl(lua_State* L)
 {
 	if (lua_gettop(L) != 2) return -1;

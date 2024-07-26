@@ -1,7 +1,7 @@
 #include <pch.hpp>
 #include "util/lua_util.hpp"
 
-void Game::input(float dt, lua_State* L)
+void Game::input(float dt, sol::state& L)
 {
 	if (underPlayerControl)
 	{
@@ -37,7 +37,7 @@ void Game::input(float dt, lua_State* L)
 
 }
 
-void Game::update(float dt, lua_State* L)
+void Game::update(float dt, sol::state& L)
 {
 	manipulate(dt, L);
 	input(dt, L);
@@ -55,7 +55,11 @@ Game::Game(sf::ContextSettings& settings)
 	, mDynamicObjects{ std::vector<Dynamic*>{} }
 	, mDynamicTextures{ std::vector<sf::Texture*>{} }
 	, underPlayerControl{nullptr}
+	,  movables{}
+	, bullets{}
 {
+	movables.clear();
+	bullets.clear();
 	mWnd.setPosition({ 100,55 });
 	mGameRunning = true;
 	tex.loadFromFile("assets/textures/tilesets/map1/platformer1.png");
@@ -105,6 +109,7 @@ void Game::cleanupManipluators(std::vector<Manipulator*>& vec)
 
 	while(!scrubbed)
 	{ 
+			scrubbed = true;
 			if (isManipulatorCompleted(vec))
 			{
 				scrubbed = false;
@@ -164,23 +169,7 @@ bool Game::isManipulatorCompleted(std::vector<Manipulator*>& vec)
 	return found;
 }
 
-void Game::loadLevel(int w, int h)
-{
-	mLevelSize = { w, h };
-	mLevelVec.clear();
-	mLevelVec.reserve((uint8_t)w * h);
-	for (int y = 0; y < h; y++)
-	{
-		for (int x = 0; x < w; x++)
-		{
-			mLevelVec.emplace_back(TileType::Empty);
-		}
-	}
 
-
-
-	std::cout << w << " " << h << std::endl;
-}
 
 Game::Dynamic* Game::createDynamicObject(int type, float x, float y, float w, float h, int dir)
 {
@@ -228,16 +217,34 @@ Game::Dynamic* Game::createDynamicObject(int type, float x, float y, float w, fl
 	tmp->pos = { x, y };
 	tmp->size = { w, h };
 
-	mDynamicObjects.emplace_back( std::move(tmp) );
+	mDynamicObjects.push_back( tmp );
 	mDynamicObjects.back()->initMembers();
-	return mDynamicObjects[(std::size_t)(mDynamicObjects.size() - 1)];
+	return tmp;
 	
 }
+
+
+
+
 
 void Game::assignPlayerControl(Dynamic& dyno)
 {
 	Dynamic* ptr = &dyno; //auto ptr = std::find_if(mDynamicObjects.begin(), mDynamicObjects.end(), [&dyno](const std::shared_ptr<Dynamic>& p) { return p.get() == dyno; });
 	underPlayerControl = ptr;
+	ptr = nullptr;
+}
+
+void Game::assignBulletObject(Dynamic& dyno)
+{
+	Dynamic* ptr = &dyno; //auto ptr = std::find_if(mDynamicObjects.begin(), mDynamicObjects.end(), [&dyno](const std::shared_ptr<Dynamic>& p) { return p.get() == dyno; });
+	bullets.push_back(ptr);
+	ptr = nullptr;
+}
+
+void Game::assignMovableObject(Dynamic& dyno)
+{
+	Dynamic* ptr = &dyno; //auto ptr = std::find_if(mDynamicObjects.begin(), mDynamicObjects.end(), [&dyno](const std::shared_ptr<Dynamic>& p) { return p.get() == dyno; });
+	movables.push_back(ptr);
 	ptr = nullptr;
 }
 

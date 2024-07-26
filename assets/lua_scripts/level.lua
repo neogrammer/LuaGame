@@ -14,124 +14,79 @@ local Player = 0
 local Bird = 1
 local BusterNormal = 2
 local Platform = 3
- local dynamics = {DynamicBehaviour1 , HorizontalBehaviour}
-
-function DynamicBehaviour1(host, dyno)
+ local dynamics = {DynamicBehaviour1, HorizontalBehaviour}
+ local obj
+function DynamicBehaviour1(dyno)
 	while true do
-		cpp_moveObject(host, dyno, 40.0, 40.0, 5.0)
+		cpp_moveObject( dyno, 40.0, 40.0, 5.0)
 		coroutine.yield()
-		cpp_moveObject(host, dyno, 40.0, 400.0, 5.0)
+		cpp_moveObject(dyno, 40.0, 400.0, 5.0)
 		coroutine.yield()
-		cpp_moveObject(host, dyno, 400.0, 400.0, 5.0)
+		cpp_moveObject( dyno, 400.0, 400.0, 5.0)
 		coroutine.yield()
-		cpp_moveObject(host, dyno, 400.0, 40.0, 5.0)
+		cpp_moveObject(dyno, 400.0, 40.0, 5.0)
 		coroutine.yield()
 	end
 end
 
-function HorizontalBehaviour(host, dyno, maxd, posy)
+function HorizontalBehaviour(dyno, maxd, posy)
 	print("[LUA] Issueing task for bullet \n")	
-		cpp_moveObject(host, dyno, maxd, posy, 1.0)
-		--coroutine.yield()
+		cpp_moveObject(dyno, maxd, posy, 1.0)
 end
 
-function IssueNextTask(host, dyno)
+function IssueNextTask( dyno)
 	if coroutine.status(dynamics[dyno].behaviour) ~= 'dead' then
-			coroutine.resume(dynamics[dyno].behaviour, host, dyno)
+			coroutine.resume(dynamics[dyno].behaviour, dyno)
 	end
 
 end
 
-function IssueNextHorizTask(host, dyno, maxd, posy)
+function IssueNextHorizTask(dyno, maxd, posy)
+	io.write("about to check the status of a coroutine")
 	if coroutine.status(dynamics[dyno].behaviour) ~= 'dead' then
-			coroutine.resume(dynamics[dyno].behaviour, host, dyno, maxd, posy)
-	end
+			io.write("Trying to resume coroutine for bullet")
+			coroutine.resume(dynamics[dyno].behaviour, dyno, maxd, posy)
+end
 
 end
 
-function LoadLevel(host, level)
+function loopFlyPad()
+	io.write("Attempt to kick the coroutine")
+	IssueNextTask(Platform)
+end
+
+function loop()
+	while counter ~= 30
+		do
+			coroutine.yield(counter);
+			counter = counter + 1;
+		end
+		return counter
+end
+
+function LoadLevel(level)
 
 	map = ""
 	size = {w=40, h=24}
 
-	if level == 1 then
-		map = 
-		"........................................"..
-		"........................................"..
-		"........................................"..
-		"..............................QWWWWWWWWW"..
-		"............QWWE..............ASSS######"..
-		"WWWWWE......A##R..................AS####"..
-		"##SSSD.......A#R....................AS##"..
-		"#R............LR......................L#"..
-		"#R............LR......................L#"..
-		"#R............LR......................L#"..
-		"#R....QWE.....LR......................L#"..
-		"#R....L##WWWWW#R......................L#"..
-		"#R....ASSSSSSSSD......................L#"..
-		"#R....................................L#"..
-		"#R....................................L#"..
-		"#R....................................L#"..
-		"#R....................................L#"..
-		"#R....................................L#"..
-		"#R....................................L#"..
-		"#R....................................L#"..
-		"#R....................................L#"..
-		"#R....................................L#"..
-		"#R..........QWWWE.....................L#"..
-		"##WWWWWWWWWW#####WWWWWWWWWWWWWWWWWWWWW##"
-	end
+	cpp_loadLevel(size.w, size.h, level)
 
-	cpp_loadLevel(host, size.w, size.h)
-
-	for y = 1, size.h do
-		for x = 1, size.w do
-			c = string.sub(map, ((y - 1) * size.w + x), ((y - 1) * size.w + x) )
-
-			if c == '.' then cpp_setTile(host, x-1, y-1, EMPTY)
-			end
-			if c == '#' then cpp_setTile(host, x-1, y-1, MID)
-			end
-
-
-			if c == 'Q' then cpp_setTile(host, x-1, y-1, TL)
-			end
-			if c == 'W' then cpp_setTile(host, x-1, y-1, T)
-			end
-			
-			if c == 'E' then cpp_setTile(host, x-1, y-1, TR)
-			end
-			if c == 'L' then cpp_setTile(host, x-1, y-1, L)
-			end
-
-			if c == 'R' then cpp_setTile(host, x-1, y-1, R)
-
-			end
-			if c == 'A' then cpp_setTile(host, x-1, y-1, BL)
-
-			end
-			if c == 'S' then cpp_setTile(host, x-1, y-1, B)
-
-			end
-			if c == 'D' then cpp_setTile(host, x-1, y-1, BR)
-
-			end
-		end
-		end
 		
-		PlayerObject = cpp_createDynamicObject(host, 0, 650.0, 460.0, 120.0, 160.0, 0)
-		cpp_assignPlayerControl(host, PlayerObject);
+		PlayerObject = cpp_createDynamicObject(0, 650.0, 460.0, 120.0, 160.0, 0)
+		cpp_assignPlayerControl(PlayerObject);
 		
-		BirdObject = cpp_createDynamicObject(host, 1, 650.0, 460.0, 220.0, 296.0, 0)
+		BirdObject = cpp_createDynamicObject( 1, 650.0, 460.0, 220.0, 296.0, 0)
 		
-		BulletObject = cpp_createDynamicObject(host, 2, 600.0, 600.0, 24.0, 18.0, 1)
+		BulletObject = cpp_createDynamicObject( 2, 600.0, 600.0, 24.0, 18.0, 1)
 		dynamics[BulletObject] = {behaviour = coroutine.create(HorizontalBehaviour) }
-		IssueNextHorizTask(host, BulletObject, 600.0 + 1280.0 * -1.0 , 600.0)
-		
+		IssueNextHorizTask( BulletObject, 600.0 + 1280.0 * -1.0 , 600.0)
 
-		Platform = cpp_createDynamicObject(host, 3, 600.0, 600.0, 67.0, 40.0, 0)
+
+		Platform = cpp_createDynamicObject( 3, 600.0, 600.0, 67.0, 40.0, 0)
 		dynamics[Platform] = {behaviour = coroutine.create(DynamicBehaviour1) }
-		IssueNextTask(host, Platform)
+		IssueNextTask( Platform)
+	
+
 
 		
 		return 1

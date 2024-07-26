@@ -8,13 +8,7 @@
 #include <SFML/System/Vector2.hpp>
 
 
-extern "C"
-{
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include <string>
-};
+#include <sol/sol.hpp>
 
 class Game
 {
@@ -124,7 +118,7 @@ public:
 			void run();
 		
     public:  // Lua Visible functions
-			static int lua_loadLevel(lua_State* L);
+
 			static int lua_setTile(lua_State* L);
 			static int lua_createDynamicObject(lua_State* L);
 			static int lua_assignPlayerControl(lua_State* L);
@@ -132,17 +126,19 @@ public:
 			static int lua_moveObject(lua_State* L);
 
     private: // Lua non-visible counterparts
-			void setTile(int x, int y, int str);
-			void loadLevel(int w, int h);
+			void setTile(int x, int y, int t);
+			void ummLoadLevel(int w, int h, int level);
 			void assignPlayerControl(Dynamic& dyno);
+			void assignBulletObject(Dynamic& dyno);
+			void assignMovableObject(Dynamic& dyno);
 			void drawTilemap();
 			void moveObject(Dynamic& dyno, float x, float y, float time);
 			Dynamic* createDynamicObject(int type, float x, float y, float w, float h, int dir);
 	
 	private:  // internal use only
-			void manipulate(float dt, lua_State* L);
-			void input(float dt, lua_State* L);
-			void update(float dt, lua_State* L);
+			void manipulate(float dt, sol::state& L);
+			void input(float dt, sol::state& L);
+			void update(float dt, sol::state& L);
 			void render();
 			void drawDynamics();
 			void cleanupManipluators(std::vector<Manipulator*>& vec);
@@ -157,6 +153,9 @@ private:  // hidden members
 
 
 				Dynamic* underPlayerControl{};
+				std::vector<Dynamic*> bullets{};
+				std::vector<Dynamic*> movables{};
+
 				std::vector<Dynamic*> friendlyProjectiles;
 				std::vector<Dynamic*> enemyProjectiles;
 
