@@ -19,7 +19,7 @@ void Game::input(float dt, sol::state& L)
 		underPlayerControl->vel = { 0.f, 0.f };
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			//underPlayerControl->vel += { 0.f, -50.f};
+			underPlayerControl->vel += { 0.f, -50.f};
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
@@ -28,7 +28,7 @@ void Game::input(float dt, sol::state& L)
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			//underPlayerControl->vel += { 0.f, 50.f};
+			underPlayerControl->vel += { 0.f, 50.f};
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
@@ -40,13 +40,55 @@ void Game::input(float dt, sol::state& L)
 		{
 
 		}
+
+
+
 		// DO PLAYER COLLISIONS HERE
+		for (auto& dyno : mDynamicObjects)
+		{
+			if (dyno->id == 0)
+				continue;
+
+			sf::FloatRect tmp = { {underPlayerControl->getAABB().getPosition()},{underPlayerControl->getAABB().getSize()} };
+			if (tmp.intersects(dyno->getAABB()))
+			{
+				underPlayerControl->pos = underPlayerControl->prevPosition;
+				underPlayerControl->vel.y = 0.f;
+				underPlayerControl->vel.x = 0.f;
+				break;
+			}
+			
+		}
+
+		for (int y = 0; y < mLevelSize.y; y++)
+		{
+			for (int x = 0; x < mLevelSize.x; x++)
+			{
+				auto type = mLevelVec[y * mLevelSize.x + x];
+				if (type != TileType::Empty)
+				{
+					sf::FloatRect tile = sf::FloatRect{ sf::Vector2f{(float)x * (float)tileSize, y * (float)tileSize}, sf::Vector2f{(float)tileSize,(float)tileSize} };
+					sf::FloatRect tmp = { {underPlayerControl->getAABB().getPosition()},{underPlayerControl->getAABB().getSize()}};
+					
+					if (tmp.intersects(tile))
+					{
+						underPlayerControl->pos = underPlayerControl->prevPosition;
+						underPlayerControl->vel.y = 0.f;
+						underPlayerControl->vel.x = 0.f;
+						break;
+					}
+				}
+			}
+		}
+
+
 		if (!(underPlayerControl->vel.x == 0.f && underPlayerControl->vel.y == 0.f))
 		{
-
-
+			underPlayerControl->prevPosition = underPlayerControl->pos;
 			underPlayerControl->pos += underPlayerControl->vel * dt;
 		}
+
+	
 	}
 
 }

@@ -15,17 +15,14 @@ local Bird = 1
 local BusterNormal = 2
 local Platform = 3
  local dynamics = {DynamicBehaviour1, HorizontalBehaviour}
- local obj
+
 function DynamicBehaviour1(dyno)
 	while true do
-		cpp_moveObject( dyno, 40.0, 40.0, 5.0)
+		cpp_moveObject( dyno, 600.0, 140.0, 5.0)
 		coroutine.yield()
-		cpp_moveObject(dyno, 40.0, 400.0, 5.0)
+		cpp_moveObject(dyno, 600.0, 600.0, 1.0)
 		coroutine.yield()
-		cpp_moveObject( dyno, 400.0, 400.0, 5.0)
-		coroutine.yield()
-		cpp_moveObject(dyno, 400.0, 40.0, 5.0)
-		coroutine.yield()
+		
 	end
 end
 
@@ -45,14 +42,14 @@ function IssueNextHorizTask(dyno, maxd, posy)
 	io.write("about to check the status of a coroutine")
 	if coroutine.status(dynamics[dyno].behaviour) ~= 'dead' then
 			io.write("Trying to resume coroutine for bullet")
-			coroutine.resume(dynamics[dyno].behaviour, dyno, maxd, posy)
+		coroutine.resume(dynamics[dyno].behaviour, dyno, maxd, posy)
 end
 
 end
 
 function loopFlyPad()
 	io.write("Attempt to kick the coroutine")
-	IssueNextTask(Platform)
+	IssueNextTask(PlatformObject)
 end
 
 function loop()
@@ -75,16 +72,16 @@ function LoadLevel(level)
 		PlayerObject = cpp_createDynamicObject(0, 650.0, 460.0, 120.0, 160.0, 0)
 		cpp_assignPlayerControl(PlayerObject);
 		
-		BirdObject = cpp_createDynamicObject( 1, 650.0, 460.0, 220.0, 296.0, 0)
+		BirdObject = cpp_createDynamicObject( 1, 1000.0, 768.0 - 32.0 - 195.0, 148.0, 199.0, 0)
 		
 		BulletObject = cpp_createDynamicObject( 2, 600.0, 600.0, 24.0, 18.0, 1)
 		dynamics[BulletObject] = {behaviour = coroutine.create(HorizontalBehaviour) }
 		IssueNextHorizTask( BulletObject, 600.0 + 1280.0 * -1.0 , 600.0)
 
 
-		Platform = cpp_createDynamicObject( 3, 600.0, 600.0, 67.0, 40.0, 0)
-		dynamics[Platform] = {behaviour = coroutine.create(DynamicBehaviour1) }
-		IssueNextTask( Platform)
+		PlatformObject = cpp_createDynamicObject( 3, 600.0, 600.0, 67.0, 40.0, 0)
+		dynamics[PlatformObject] = {behaviour = coroutine.create(DynamicBehaviour1) }
+		IssueNextTask( PlatformObject)
 	
 
 

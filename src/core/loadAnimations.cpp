@@ -118,14 +118,14 @@ std::vector<sf::IntRect> Game::Dynamic::loadAnimation(int numFrames, int startCo
 	return temp;
 }
 
-sf::Vector2f Game::Dynamic::getNextPos()
+sf::Vector2f Game::Dynamic::getNextPos(float dt)
 {
-    return sf::Vector2f();
+	return { pos.x + (vel.x * dt), pos.y + (vel.y * dt) };
 }
 
 sf::Vector2f Game::Dynamic::getLastPos()
 {
-    return sf::Vector2f();
+	return prevPosition;
 }
 
 

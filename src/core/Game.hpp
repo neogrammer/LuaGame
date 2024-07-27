@@ -74,7 +74,7 @@ class Game
 		DynamicType dType{ DynamicType::NotSet };
 		sf::Vector2f pos{0.f,0.f};
 		sf::Vector2f prevPosition{};
-		sf::Vector2f getNextPos();
+		sf::Vector2f getNextPos(float dt);
 		sf::Vector2f getLastPos();
 
 		sf::FloatRect aabb{};

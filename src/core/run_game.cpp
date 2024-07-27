@@ -24,7 +24,7 @@ void Game::run()
 		underPlayerControl->pos.x = 50.f;
 		underPlayerControl->pos.y = 768.f;
 		underPlayerControl->setAABB();
-		underPlayerControl->pos.y = 768.f - (float)tileSize - underPlayerControl->size.y + (underPlayerControl->size.y - (underPlayerControl->getAABBNoChange().height + underPlayerControl->animData.at(std::pair(underPlayerControl->currentAnim, underPlayerControl->facingLeft)).bbox.at(underPlayerControl->index).top) - 0.1f);
+		underPlayerControl->pos.y = 768.f - (float)tileSize - underPlayerControl->size.y + (underPlayerControl->size.y - (underPlayerControl->getAABBNoChange().height + underPlayerControl->animData.at(std::pair(underPlayerControl->currentAnim, underPlayerControl->facingLeft)).bbox.at(underPlayerControl->index).top) - 10.1f);
 		underPlayerControl->setAABB();
 
 		//auto tmp = underPlayerControl->getAABB();

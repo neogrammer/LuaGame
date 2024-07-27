@@ -105,12 +105,12 @@ sf::Vector2f Game::Dynamic::getCenterOffset()
 		sf::CircleShape circ{ 5.f };
 		circ.setFillColor(sf::Color::Yellow);
 		circ.setOrigin({ 2.5f, 2.5f });
-		circ.setPosition({ spr.getOrigin().x + ((float)spr.getTextureRect().width / 2.f) + spr.getPosition().x,spr.getOrigin().y + ((float)spr.getTextureRect().height / 2.f) + spr.getPosition().y });
+		circ.setPosition({ ((float)spr.getTextureRect().width / 2.f) + spr.getPosition().x - spr.getOrigin().x, ((float)spr.getTextureRect().height / 2.f) + spr.getPosition().y - spr.getOrigin().y });
 
 		sf::CircleShape circ2{ 5.f };
 		circ2.setFillColor(sf::Color::Green);
 		circ2.setOrigin({ 2.5f, 2.5f });
-		circ2.setPosition({ my.getAABBNoChange().left + (my.getAABBNoChange().width / 2.f) , my.getAABBNoChange().top + (my.getAABBNoChange().height / 2.f) });
+		circ2.setPosition({ my.getAABB().left + (my.getAABB().width / 2.f) , my.getAABB().top + (my.getAABB().height / 2.f) });
 
 		sf::Vector2f offset = { circ2.getPosition().x - circ.getPosition().x, circ2.getPosition().y - circ.getPosition().y };
 

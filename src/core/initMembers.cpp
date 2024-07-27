@@ -14,7 +14,7 @@ void Game::Dynamic::initMembers()
 		this->speed = {200.f,200.f};
 		break;
 	case DynamicType::MetalBird:
-		this->size = {220.f,296.f};
+		this->size = {148.f,199.f};
 		this->unidirectional = true;
 		this->speed = {0.f,0.f};
 		break;
