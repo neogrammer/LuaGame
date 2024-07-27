@@ -19,20 +19,20 @@ void Game::input(float dt, sol::state& L)
 		underPlayerControl->vel = { 0.f, 0.f };
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			underPlayerControl->vel += { 0.f, -50.f};
+			//underPlayerControl->vel += { 0.f, -50.f};
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
-			underPlayerControl->vel += { -50.f, 0.f};
+			underPlayerControl->vel += { -200.f, 0.f};
 			underPlayerControl->facingLeft = true;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			underPlayerControl->vel += { 0.f, 50.f};
+			//underPlayerControl->vel += { 0.f, 50.f};
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			underPlayerControl->vel += { 50.f, 0.f};
+			underPlayerControl->vel += { 200.f, 0.f};
 			underPlayerControl->facingLeft = false;
 		}
 
@@ -41,7 +41,34 @@ void Game::input(float dt, sol::state& L)
 
 		}
 
+		float possibleY = underPlayerControl->pos.y + ((underPlayerControl->vel.y + 50.f) * dt);
+		float gravity = 50.f;
+		bool collided = false;
+		sf::FloatRect tmpYFloatRect = { {underPlayerControl->getAABB().getPosition().x,possibleY },{underPlayerControl->getAABB().getSize().x, underPlayerControl->getAABB().getSize().y } };
+		for (int y = (int)((tmpYFloatRect.top + tmpYFloatRect.height - 16) / tileSize); y < mLevelSize.y; y++)
+		{
+			for (int x = (int)(tmpYFloatRect.left / tileSize) ; x < ((int)((tmpYFloatRect.left / tileSize) ) + 1); x++)
+			{
+				auto type = mLevelVec[y * mLevelSize.x + x];
+				if (type != TileType::Empty )
+				{
+					sf::FloatRect tile = sf::FloatRect{ sf::Vector2f{(float)x * (float)tileSize, y * (float)tileSize}, sf::Vector2f{(float)tileSize,(float)tileSize} };
+					sf::FloatRect tmp = { {underPlayerControl->getAABB().getPosition()},{underPlayerControl->getAABB().getSize()} };
+					sf::FloatRect olap{};
+					if (tmpYFloatRect.intersects(tile, olap))
+					{
+						
+						underPlayerControl->vel.y = 0.f;
+						
+						collided = true;
+						gravity = 0.f;
 
+						break;
+					}
+				}
+			}
+		}
+	
 
 		// DO PLAYER COLLISIONS HERE
 		for (auto& dyno : mDynamicObjects)
@@ -74,7 +101,8 @@ void Game::input(float dt, sol::state& L)
 					{
 						underPlayerControl->pos = underPlayerControl->prevPosition;
 						underPlayerControl->vel.y = 0.f;
-						underPlayerControl->vel.x = 0.f;
+						//underPlayerControl->vel.x = 0.f;
+						collided = true;
 						break;
 					}
 				}
@@ -82,11 +110,14 @@ void Game::input(float dt, sol::state& L)
 		}
 
 
-		if (!(underPlayerControl->vel.x == 0.f && underPlayerControl->vel.y == 0.f))
-		{
+			
 			underPlayerControl->prevPosition = underPlayerControl->pos;
+
+			if (!collided)
+				underPlayerControl->vel.y += gravity;
 			underPlayerControl->pos += underPlayerControl->vel * dt;
-		}
+			if (collided) underPlayerControl->pos.y -= 0.1f;
+		
 
 	
 	}

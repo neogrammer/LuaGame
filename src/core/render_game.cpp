@@ -4,10 +4,10 @@
 
 void Game::render()
 {
-	drawTilemap();
+
 
 	drawDynamics();
-	
+	drawTilemap();
 	if (mShowBBoxes)
 	{
 		
